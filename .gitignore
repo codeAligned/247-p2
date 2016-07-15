@@ -1,0 +1,4 @@
+*.o
+*.d
+mvc
+cards_png/
