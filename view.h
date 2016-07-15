@@ -27,7 +27,6 @@
 class Controller;
 class Model;
 
-
 class View : public Gtk::Window, public Observer {
 public:
     View( Controller*, Model* );

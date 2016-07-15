@@ -44,7 +44,7 @@ View::View(Controller *c, Model *m) : model_(m), controller_(c), playedLabel("Pl
     control_panel.add(quit_game);
     quit_game.signal_clicked().connect(sigc::mem_fun( *this, &View::onQuitGame));
 
-//Adding the played cards section -----------------------------------
+    //Adding the played cards section -----------------------------------
     vbox.add(playedLabel);
     // Add the horizontal box for laying out the images to the frame.
 
@@ -86,16 +86,17 @@ View::View(Controller *c, Model *m) : model_(m), controller_(c), playedLabel("Pl
         scoreLabels[i] = new Gtk::Label("Score: ");
         player_modules[i]->pack_start(*scoreLabels[i]);
 
-        ragequitButtons[i] = new Gtk::Button("Rage");
+        ragequitButtons[i] = new Gtk::Button("Human");
         ragequitButtons[i]->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &View::onRagequit), i) );
         player_modules[i]->pack_start(*ragequitButtons[i]);
     }
 
     std::cout<<"Tried to make player module"<<std::endl;
 
-// Adding the hand
+    // Adding the hand
     vbox.add( handLabel);
     vbox.add( hboxHand );
+
     // Initialize 13 empty cards and place them in the box.
     for (int i = 0; i < 13; i++ ) {
         handButtons[i] = new Gtk::Button();
@@ -111,14 +112,11 @@ View::View(Controller *c, Model *m) : model_(m), controller_(c), playedLabel("Pl
 
     // The final step is to display this newly created widget.
     show_all();
-	// Associate button "clicked" events with local onButtonClicked() method defined below.
-	// next_button.signal_clicked().connect( sigc::mem_fun( *this, &View::nextButtonClicked ) );
-	// reset_button.signal_clicked().connect( sigc::mem_fun( *this, &View::resetButtonClicked ) );
 
-	// Register view as observer of model
+    // Register view as observer of model
 	model_->subscribe(this);
 
-} // View::View
+}
 
 View::~View() {}
 
