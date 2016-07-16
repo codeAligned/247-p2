@@ -30,6 +30,9 @@ public:
     void onComputerToggle(int);
     void onQuitGame();
     void onRoundEnd();
+
+    void displayScore(std::vector<Player*>);
+
 	virtual ~RoundView();
 	virtual void update();	// Observer Pattern: concrete update() method
 

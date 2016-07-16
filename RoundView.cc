@@ -177,33 +177,15 @@ void RoundView::onRagequit(int i){
 
 void RoundView::onRoundEnd(){
     std::cout<<"Round ends."<<std::endl;
-    // Gtk::Dialog roundEndReport = Gtk::Dialog( "End of Round Report", frame, true, true );
-    static Gtk::Dialog *dialog = new Gtk::Dialog("End of Round Report");
-    Gtk::VBox * reportBox = dialog->get_vbox();
-    // gtk_window_set_modal( GTK_WINDOW( dialog ), TRUE );
-
-    /* Set title */
-    dialog->set_title("Round Report");
-    // gtk_window_set_title( GTK_WINDOW( dialog ), "Round Report" );
-    Gtk::Label * scoreReportLabels[4];
-    Gtk::Label * discardReportLabels[4];
-    
-    // dialog->add(*reportBox);
-
-    for( int i=0;i<4;i++){
-        std::stringstream ss;
-        ss<<i+1;
-        discardReportLabels[i] = new Gtk::Label("Player " +ss.str()+ "'s discards: ");
-        scoreReportLabels[i] = new Gtk::Label("Player " +ss.str()+ "'s score: ");
-        reportBox->add(*discardReportLabels[i]);
-        reportBox->add(*scoreReportLabels[i]);
-
-        // dialog->add(*discardReportLabels[i]);
-        // dialog->add(*scoreReportLabels[i]);
+    std::vector<Player*> players_ = std::vector<Player*>();
+    for (int i = 0; i <= 4; i++) {
+      Player* newPlayer = new ComputerPlayer();
+      players_.push_back( newPlayer );
     }
-    dialog->show_all();
 
-    dialog->run();
+
+    //TEMP CODE SHOULD LET CONTROLLER DO THIS
+    displayScore(players_);
 }
 
 void RoundView::onHumanToggle(int i){
@@ -244,3 +226,39 @@ void RoundView::nextButtonClicked() {
 void RoundView::resetButtonClicked() {
   controller_->resetButtonClicked();
 } // RoundView::resetButtonClicked
+
+void RoundView::displayScore(std::vector<Player*> players){
+    static Gtk::Dialog *dialog = new Gtk::Dialog("End of Round Report");
+    Gtk::VBox * reportBox = dialog->get_vbox();
+
+    /* Set title */
+    dialog->set_title("Round Report");
+
+    Gtk::Label * scoreReportLabels[4];
+    Gtk::Label * discardReportLabels[4];
+    
+    // dialog->add(*reportBox);
+
+    for( int i=0;i<4;i++){
+        std::stringstream ss;
+        ss<<i+1;
+        // std::cout<<"# players is "<<players.size()<<std::endl;
+        // std::vector<Card*> discards = players.at(i)->getDiscards();
+        // std::cout<<"# discards is "<<discards.size()<<std::endl;
+        discardReportLabels[i] = new Gtk::Label("Player " +ss.str()+ "'s discards: ");
+        // std::cout<<"Discarding"<<std::endl;
+        // for(int j=0;j<discards.size();j++){
+        //     std::cout<<discards.at(j);
+        // }
+
+        scoreReportLabels[i] = new Gtk::Label("Player " +ss.str()+ "'s score: ");
+        // std::cout<<"Score"<<std::endl;
+        // for(int j=0;j<players.size();j++){
+        //     std::cout<<discards.at(j);
+        // }
+        reportBox->add(*discardReportLabels[i]);
+        reportBox->add(*scoreReportLabels[i]);
+    }
+    
+    dialog->show_all();
+}
