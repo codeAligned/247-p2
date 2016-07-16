@@ -11,6 +11,7 @@
 #include "Player.h"
 #include "ComputerPlayer.h"
 #include "HumanPlayer.h"
+#include "RoundModel.h"
 
 class RoundModel;
 

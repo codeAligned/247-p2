@@ -1,6 +1,5 @@
 /* thanks jo */
 #include "RoundController.h"
-#include "RoundModel.h"
 using namespace std;
 
 RoundController::RoundController(RoundModel *m, std::vector<Player*>, int seed)  : model_(m) {
@@ -10,6 +9,7 @@ RoundController::RoundController(RoundModel *m, std::vector<Player*>, int seed) 
 
 // Loop through each player's hand and check if they have 7 Spades
 int RoundController::who7Spades() const{
+    cout<<model_->getPlayers().size()<<endl;
     vector<Player*> players = model_->getPlayers();
     for ( int i = 0; i < players.size(); ++i ) {
         vector<Card*> tempHand = players.at(i)->getCards();
@@ -25,6 +25,7 @@ int RoundController::who7Spades() const{
 // RoundController::~RoundController() {}
 
 void RoundController::startRound(int &player_number) {
+    cout<<"Starting round."<<endl;
     for(int i = 0; i < 52; ++i) {
         startTurns(player_number);
     }

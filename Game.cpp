@@ -13,7 +13,9 @@ Game::Game(int seed) {
             round_controller_->startRound(player_7spades);
         }
         else {
-            round_controller_ = new RoundController(players_, seed);
+            Deck* deck = new Deck(seed);
+            RoundModel* round_model = new RoundModel(players_,deck);
+            round_controller_ = new RoundController(round_model,players_, seed);
         }
     }
     displayWinner();

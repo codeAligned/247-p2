@@ -19,8 +19,12 @@ RoundView::RoundView(RoundController *c, RoundModel *m) : model_(m), controller_
     nextSuit = (Suit) 0;
     nextFace = (Rank) 0;
 
+    std::cout<<"Making Glib"<<std::endl;
+
     const Glib::RefPtr<Gdk::Pixbuf> nullCardPixbuf = deck.null();
     const Glib::RefPtr<Gdk::Pixbuf> cardPixbuf     = deck.image( ACE, SPADE );
+
+    std::cout<<"Got Glib"<<std::endl;
 
     // Sets the border width of the window.
     set_border_width( 10 );
