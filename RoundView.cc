@@ -47,6 +47,9 @@ RoundView::RoundView(RoundController *c, RoundModel *m) : model_(m), controller_
     nameField.set_text( "0" );
     control_panel.add(quit_game);
     quit_game.signal_clicked().connect(sigc::mem_fun( *this, &RoundView::onQuitGame));
+    testButton.set_label("TEST ROUND END");
+    control_panel.pack_start( testButton );
+    testButton.signal_clicked().connect(sigc::mem_fun( *this, &RoundView::onRoundEnd));
 
     //Adding the played cards section -----------------------------------
     vbox.add(playedLabel);
@@ -130,6 +133,7 @@ RoundView::RoundView(RoundController *c, RoundModel *m) : model_(m), controller_
     show_all();
 
     for(int i=0;i<4;i++){
+        isHuman[i]=true;
         toggleCompButtons[i]->hide();
         ragequitButtons[i]->hide();
     }
@@ -171,14 +175,47 @@ void RoundView::onRagequit(int i){
     std::cout<<"Player "<<i+1<< " ragequit."<<std::endl;
 }
 
+void RoundView::onRoundEnd(){
+    std::cout<<"Round ends."<<std::endl;
+    // Gtk::Dialog roundEndReport = Gtk::Dialog( "End of Round Report", frame, true, true );
+    static Gtk::Dialog *dialog = new Gtk::Dialog("End of Round Report");
+    Gtk::VBox * reportBox = dialog->get_vbox();
+    // gtk_window_set_modal( GTK_WINDOW( dialog ), TRUE );
+
+    /* Set title */
+    dialog->set_title("Round Report");
+    // gtk_window_set_title( GTK_WINDOW( dialog ), "Round Report" );
+    Gtk::Label * scoreReportLabels[4];
+    Gtk::Label * discardReportLabels[4];
+    
+    // dialog->add(*reportBox);
+
+    for( int i=0;i<4;i++){
+        std::stringstream ss;
+        ss<<i+1;
+        discardReportLabels[i] = new Gtk::Label("Player " +ss.str()+ "'s discards: ");
+        scoreReportLabels[i] = new Gtk::Label("Player " +ss.str()+ "'s score: ");
+        reportBox->add(*discardReportLabels[i]);
+        reportBox->add(*scoreReportLabels[i]);
+
+        // dialog->add(*discardReportLabels[i]);
+        // dialog->add(*scoreReportLabels[i]);
+    }
+    dialog->show_all();
+
+    dialog->run();
+}
+
 void RoundView::onHumanToggle(int i){
     std::cout<<"Player "<<i+1<<" is now Computer."<<std::endl;
+    isHuman[i]=false;
     toggleHumanButtons[i]->hide();
     toggleCompButtons[i]->show();
 }
 
 void RoundView::onComputerToggle(int i){
     std::cout<<"Player "<<i+1<<" is now Human."<<std::endl;
+    isHuman[i]=true;
     toggleCompButtons[i]->hide();
     toggleHumanButtons[i]->show();
 }

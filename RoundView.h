@@ -11,6 +11,7 @@
 #include <gtkmm/button.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/entry.h>
+#include <gtkmm/dialog.h>
 
 #include "DeckGUI.h"
 #include "observer.h"
@@ -28,6 +29,7 @@ public:
     void onHumanToggle(int);
     void onComputerToggle(int);
     void onQuitGame();
+    void onRoundEnd();
 	virtual ~RoundView();
 	virtual void update();	// Observer Pattern: concrete update() method
 
@@ -69,6 +71,9 @@ private:
     Gtk::Button * ragequitButtons[4];
     Gtk::Button * toggleHumanButtons[4];
     Gtk::Button * toggleCompButtons[4];
+
+    bool isHuman[4];
+
     Gtk::Label playedLabel;
     Gtk::Label handLabel;
     Gtk::Label nameLabel;
@@ -79,6 +84,9 @@ private:
 	// Signal handlers:
 	void nextButtonClicked();
 	void resetButtonClicked();
+
+    //temp button:
+    Gtk::Button testButton;
 
 }; // View
 
