@@ -40,6 +40,7 @@ int main( int argc, char * argv[] ) {
 	std::cout<<"Test"<<std::endl;
 
 	Gtk::Main::run( view );               // Show the window and return when it is closed.
+	std::cout<<"View done"<<std::endl;
 
 	return 0;
 } // main

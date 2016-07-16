@@ -25,6 +25,8 @@ public:
     void onNewGame();
     void onCardClicked(int);
     void onRagequit(int);
+    void onHumanToggle(int);
+    void onComputerToggle(int);
     void onQuitGame();
 	virtual ~RoundView();
 	virtual void update();	// Observer Pattern: concrete update() method
@@ -65,10 +67,13 @@ private:
     Gtk::Button new_game;
     Gtk::Button quit_game;
     Gtk::Button * ragequitButtons[4];
+    Gtk::Button * toggleHumanButtons[4];
+    Gtk::Button * toggleCompButtons[4];
     Gtk::Label playedLabel;
     Gtk::Label handLabel;
     Gtk::Label nameLabel;
     Gtk::Label * scoreLabels[4];
+    Gtk::Label * discardLabels[4];
     Gtk::Label * pLabels[4];
     Gtk::Frame frame;
 	// Signal handlers:

@@ -87,12 +87,24 @@ RoundView::RoundView(RoundController *c, RoundModel *m) : model_(m), controller_
         pLabels[i] = new Gtk::Label("Player " + ss.str());
         player_modules[i]->pack_start(*pLabels[i]);
 
-        scoreLabels[i] = new Gtk::Label("Score: ");
-        player_modules[i]->pack_start(*scoreLabels[i]);
-
-        ragequitButtons[i] = new Gtk::Button("Human");
+        ragequitButtons[i] = new Gtk::Button("Rage");
         ragequitButtons[i]->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &RoundView::onRagequit), i) );
         player_modules[i]->pack_start(*ragequitButtons[i]);
+
+
+        toggleHumanButtons[i] = new Gtk::Button("Human");
+        toggleHumanButtons[i]->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &RoundView::onHumanToggle), i) );
+        player_modules[i]->pack_start(*toggleHumanButtons[i]);
+
+        toggleCompButtons[i] = new Gtk::Button("Computer");
+        toggleCompButtons[i]->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &RoundView::onComputerToggle), i) );
+        player_modules[i]->pack_start(*toggleCompButtons[i]);
+
+        scoreLabels[i] = new Gtk::Label("Score: ");
+        player_modules[i]->pack_start(*scoreLabels[i]);
+        
+        discardLabels[i] = new Gtk::Label("Discards: ");
+        player_modules[i]->pack_start(*discardLabels[i]);
     }
 
     std::cout<<"Tried to make player module"<<std::endl;
@@ -117,6 +129,11 @@ RoundView::RoundView(RoundController *c, RoundModel *m) : model_(m), controller_
     // The final step is to display this newly created widget.
     show_all();
 
+    for(int i=0;i<4;i++){
+        toggleCompButtons[i]->hide();
+        ragequitButtons[i]->hide();
+    }
+
     // Register view as observer of model
 	model_->subscribe(this);
 
@@ -134,7 +151,12 @@ void RoundView::update() {
 }
 
 void RoundView::onNewGame(){
-    std::cout<<"New Game. Seed = "<< nameField.get_text() <<std::endl;
+    std::cout<<"New Game. Seed = "<< nameField.get_text() <<std::endl;  
+    for(int i=0;i<4;i++){
+        toggleCompButtons[i]->hide();
+        toggleHumanButtons[i]->hide();
+        ragequitButtons[i]->show();
+    }
 }
 
 void RoundView::onQuitGame(){
@@ -147,6 +169,18 @@ void RoundView::onCardClicked(int i){
 
 void RoundView::onRagequit(int i){
     std::cout<<"Player "<<i+1<< " ragequit."<<std::endl;
+}
+
+void RoundView::onHumanToggle(int i){
+    std::cout<<"Player "<<i+1<<" is now Computer."<<std::endl;
+    toggleHumanButtons[i]->hide();
+    toggleCompButtons[i]->show();
+}
+
+void RoundView::onComputerToggle(int i){
+    std::cout<<"Player "<<i+1<<" is now Human."<<std::endl;
+    toggleCompButtons[i]->hide();
+    toggleHumanButtons[i]->show();
 }
 
 void RoundView::onButtonClicked()
