@@ -14,7 +14,7 @@ const int numCards = numFaces * numSuits;
 
 class RoundModel : public Subject {
 public:
-    RoundModel();
+    RoundModel(int);
     RoundModel(std::vector<Player*>, Deck*);
     ~RoundModel();
     std::vector<Player*> getPlayers() const;

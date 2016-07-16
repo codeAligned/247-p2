@@ -3,8 +3,11 @@
 using namespace std;
 
 RoundController::RoundController(RoundModel *m, std::vector<Player*>, int seed)  : model_(m) {
-    int player_7spades = who7Spades();
-    startRound(player_7spades);
+    player_7spades_ = who7Spades();
+}
+
+void RoundController::newGame(){
+    startRound(player_7spades_);
 }
 
 // Loop through each player's hand and check if they have 7 Spades

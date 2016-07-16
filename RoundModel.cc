@@ -1,9 +1,21 @@
 /*  Created by Jo Atlee on 06/07/09. */
 
 #include "RoundModel.h"
+#include "ComputerPlayer.h"
+#include "HumanPlayer.h"
 using namespace std;
 
-RoundModel::RoundModel() : topCard_(-1) {}
+RoundModel::RoundModel(int seed) : topCard_(-1) {
+  deck_ = new Deck(seed);
+  for (int i = 1; i <= 4; ++i) {
+      Player* newPlayer = new ComputerPlayer();
+      players_.push_back( newPlayer );
+  }
+  vector<Hand*> hands = deck_->dealCards();
+  for(int i = 0; i < hands.size(); ++i) {
+      players_.at(i)->setHand(hands.at(i));
+  }
+}
 
 RoundModel::RoundModel(std::vector<Player*> players, Deck* new_deck) {
     deck_ = new_deck;
