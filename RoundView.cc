@@ -1,8 +1,8 @@
 /* Thanks Jo Atlee */
 #include "observer.h"
-#include "view.h"
-#include "controller.h"
-#include "model.h"
+#include "RoundView.h"
+#include "RoundController.h"
+#include "RoundModel.h"
 #include "subject.h"
 #include "DeckGUI.h"
 #include <iostream>
@@ -10,14 +10,14 @@
 
 // Creates buttons with labels. Sets butBox elements to have the same size,
 // with 10 pixels between widgets
-View::View(Controller *c, Model *m) : model_(m), controller_(c), playedLabel("Played cards:"),
+RoundView::RoundView(RoundController *c, RoundModel *m) : model_(m), controller_(c), playedLabel("Played cards:"),
                                       hboxHand( true, 10 ), control_panel( true, 10 ),
                                       new_game( "New Game" ), quit_game( "Quit" ),
                                       nameLabel( "Enter seed:" ), handLabel( "Current Hand:" ) {
 
     nextCard = 0;
-    nextSuit = (Suits) 0;
-    nextFace = (Faces) 0;
+    nextSuit = (Suit) 0;
+    nextFace = (Rank) 0;
 
     const Glib::RefPtr<Gdk::Pixbuf> nullCardPixbuf = deck.null();
     const Glib::RefPtr<Gdk::Pixbuf> cardPixbuf     = deck.image( ACE, SPADE );
@@ -37,12 +37,12 @@ View::View(Controller *c, Model *m) : model_(m), controller_(c), playedLabel("Pl
     //Add game controls
     vbox.add(control_panel);
     control_panel.add(new_game);
-    new_game.signal_clicked().connect(sigc::mem_fun( *this, &View::onNewGame));
+    new_game.signal_clicked().connect(sigc::mem_fun( *this, &RoundView::onNewGame));
     control_panel.pack_start( nameLabel );
     control_panel.pack_start( nameField );
     nameField.set_text( "0" );
     control_panel.add(quit_game);
-    quit_game.signal_clicked().connect(sigc::mem_fun( *this, &View::onQuitGame));
+    quit_game.signal_clicked().connect(sigc::mem_fun( *this, &RoundView::onQuitGame));
 
     //Adding the played cards section -----------------------------------
     vbox.add(playedLabel);
@@ -65,7 +65,7 @@ View::View(Controller *c, Model *m) : model_(m), controller_(c), playedLabel("Pl
     std::cout<<"Finished setting card"<<std::endl;
 
     // Attach event listener to button
-    // button.signal_clicked().connect(sigc::mem_fun( *this, &View::onButtonClicked));
+    // button.signal_clicked().connect(sigc::mem_fun( *this, &RoundView::onButtonClicked));
 
     // Add the button to the box.
     // hboxClubs.add( button );
@@ -87,7 +87,7 @@ View::View(Controller *c, Model *m) : model_(m), controller_(c), playedLabel("Pl
         player_modules[i]->pack_start(*scoreLabels[i]);
 
         ragequitButtons[i] = new Gtk::Button("Human");
-        ragequitButtons[i]->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &View::onRagequit), i) );
+        ragequitButtons[i]->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &RoundView::onRagequit), i) );
         player_modules[i]->pack_start(*ragequitButtons[i]);
     }
 
@@ -100,14 +100,14 @@ View::View(Controller *c, Model *m) : model_(m), controller_(c), playedLabel("Pl
     // Initialize 13 empty cards and place them in the box.
     for (int i = 0; i < 13; i++ ) {
         handButtons[i] = new Gtk::Button();
-        // Glib::RefPtr<Gdk::Pixbuf> cardImg = deck.image( static_cast<Faces>(i), SPADE );
+        // Glib::RefPtr<Gdk::Pixbuf> cardImg = deck.image( static_cast<Rank>(i), SPADE );
         // handButtons[i]->set_image(*(new Gtk::Image(cardImg)));
         handButtons[i]->set_image(*(new Gtk::Image(nullCardPixbuf)));
         // card[i] = new Gtk::Image( nullCardPixbuf );
         hboxHand.add(*handButtons[i]);
-        // handButtons[i]->signal_clicked().connect(sigc::mem_fun( *this, &View::onButtonClicked));
-        handButtons[i]->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &View::onCardClicked), i) );
-        // handButtons[i]->signal_clicked().connect( sigc::bind<Glib::ustring>( sigc::mem_fun(*this, &View::onCardClicked), "button 1") );
+        // handButtons[i]->signal_clicked().connect(sigc::mem_fun( *this, &RoundView::onButtonClicked));
+        handButtons[i]->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &RoundView::onCardClicked), i) );
+        // handButtons[i]->signal_clicked().connect( sigc::bind<Glib::ustring>( sigc::mem_fun(*this, &RoundView::onCardClicked), "button 1") );
     }
 
     // The final step is to display this newly created widget.
@@ -118,54 +118,54 @@ View::View(Controller *c, Model *m) : model_(m), controller_(c), playedLabel("Pl
 
 }
 
-View::~View() {}
+RoundView::~RoundView() {}
 
-void View::update() {
-  Suits suit = model_->suit();
-  Faces face = model_->face();
+void RoundView::update() {
+  Suit suit = model_->suit();
+  Rank face = model_->face();
   // if ( suit == NOSUIT )
   //   card.set( deck.null() );
   // else
   //   card.set( deck.image(face, suit) );
 }
 
-void View::onNewGame(){
+void RoundView::onNewGame(){
     std::cout<<"New Game. Seed = "<< nameField.get_text() <<std::endl;
 }
 
-void View::onQuitGame(){
+void RoundView::onQuitGame(){
     std::cout<<"Quit Game."<<std::endl;
 }
 
-void View::onCardClicked(int i){
+void RoundView::onCardClicked(int i){
     std::cout<<"Card "<<i<< " clicked."<<std::endl;
 }
 
-void View::onRagequit(int i){
+void RoundView::onRagequit(int i){
     std::cout<<"Player "<<i+1<< " ragequit."<<std::endl;
 }
 
-void View::onButtonClicked()
+void RoundView::onButtonClicked()
 {
     card[nextCard]->set(deck.image(nextFace, nextSuit));
 
     nextCard = (nextCard+1) % 13;
     if( (nextFace+1) == 13)
     {
-        nextFace = (Faces) 0;
-        nextSuit = (Suits) ((nextSuit + 1) % 4);
+        nextFace = (Rank) 0;
+        nextSuit = (Suit) ((nextSuit + 1) % 4);
     }
     else
     {
-        nextFace = (Faces) (nextFace+1);
+        nextFace = (Rank) (nextFace+1);
     }
     std::cout<< "Button clicked"<<std::endl;
 }
 
-void View::nextButtonClicked() {
+void RoundView::nextButtonClicked() {
   controller_->nextButtonClicked();
-} // View::nextButtonClicked
+} // RoundView::nextButtonClicked
 
-void View::resetButtonClicked() {
+void RoundView::resetButtonClicked() {
   controller_->resetButtonClicked();
-} // View::resetButtonClicked
+} // RoundView::resetButtonClicked
