@@ -24,6 +24,7 @@ public:
     std::vector<Card*> getPlayedCards() const;
     void ragequit(int, Player*);
     void newRound();
+    void updateDeck(int);
     Suit suit();
     Rank face();
     void nextCard();

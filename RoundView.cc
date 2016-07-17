@@ -216,6 +216,13 @@ void RoundView::showHand(int player_number) {
 
 void RoundView::onNewGame(){
     cout<<"New Game. Seed = "<< nameField.get_text() <<endl;
+
+    stringstream text;
+    int seed;
+    text << nameField.get_text().raw();
+    text >> seed;
+    model_->updateDeck(seed);
+
     model_->setPlayers(isHuman);
     for(int i = 0; i < 4; i++) {
         toggleCompButtons[i]->hide();
@@ -242,6 +249,12 @@ void RoundView::onQuitGame(){
         ragequitButtons[i]->hide();
         toggleHumanButtons[i]->show();
     }
+    std::stringstream text;
+    int seed;
+    text << nameField.get_text().raw();
+    text >> seed;
+    RoundModel model = RoundModel(seed);                          // Create model
+    RoundController controller( &model, model.getPlayers());  // Create controller
     cout<<"Quit Game."<<endl;
 }
 

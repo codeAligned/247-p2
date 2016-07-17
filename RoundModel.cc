@@ -10,6 +10,13 @@ RoundModel::RoundModel(int seed) : topCard_(-1) {
   deck_->shuffle();
 }
 
+void RoundModel::updateDeck(int seed) {
+    cout << "Updating deck with seed: " << seed << endl;
+    delete deck_;
+    deck_ = new Deck(seed);
+    deck_->shuffle();
+}
+
 RoundModel::RoundModel(std::vector<Player*> players, Deck* new_deck) {
     deck_ = new_deck;
     vector<Hand*> hands = new_deck->dealCards();
