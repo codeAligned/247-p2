@@ -143,6 +143,7 @@ void RoundView::update() {
         }
         else{
             controller_->newRound();
+            cleanRound();
         }
     }
     else{
@@ -336,4 +337,27 @@ void RoundView::displayWinner(){
     dialog->set_title("Game Over");
 
     dialog->show_all();
+
+    cleanEndGame();
+}
+
+void RoundView::cleanRound(){
+    //Clean played cards
+    for (int i=0;i<4;i++){
+        // Initialize 4 empty cards and place them in the box.
+        for (int j = 0+13*i; j < 13*(i+1); j++ ) {
+            card[j]->set( deck.null() );
+        }
+    }
+}
+
+void RoundView::cleanEndGame(){
+    for(int i=0;i<4;i++){
+        ragequitButtons[i]->set_sensitive(false);
+    }
+
+    for (int i=0;i<13;i++){
+        Gtk::Image* card_image = new Gtk::Image( deck.null() );
+        handButtons[i]->set_image(*(card_image));
+    }
 }

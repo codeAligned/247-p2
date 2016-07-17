@@ -29,6 +29,8 @@ public:
     void onComputerToggle(int);
     void onQuitGame();
     void onRoundEnd();
+    void cleanRound();
+    void cleanEndGame();
 
     void displayScore(std::vector<Player*>);
     void displayWinner();
