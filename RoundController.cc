@@ -177,6 +177,16 @@ bool RoundController::determinePlay(Player* p, Card c){
     return false;
 }
 
+void RoundController::playComputerTurn(int player_number) {
+    Player* current_player = getPlayer(player_number);
+    executeCommand(playTurn(current_player));
+}
+
+bool RoundController::playerIsHuman(int player_number) {
+    Player* current_player = getPlayer(player_number);
+    return current_player->isHuman();
+}
+
 // Returns vector of legal plays for a player
 vector<Card*> RoundController::calculateLegalPlay(Player* p) const{
     vector<Card*> played = model_->getPlayedCards();

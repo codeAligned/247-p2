@@ -33,6 +33,8 @@ public:
     std::vector<Card*> getCurrentPlayerHand() const;
    void nextButtonClicked();
    void resetButtonClicked();
+   void playComputerTurn(int);
+   bool playerIsHuman(int);
     Command playTurn(Player*);
     void executeCommand(Command);
     bool determinePlay(Player*, Card);
