@@ -37,6 +37,7 @@ public:
 	virtual void update();	// Observer Pattern: concrete update() method
 
 private:
+    void showHand(int);
 	// Observer Pattern: to access Model accessors without having to downcast subject
 	RoundModel *model_;
 
@@ -46,14 +47,7 @@ private:
 	// Card Images
 	DeckGUI deck;    // Knows all of the card pixel buffers.
 
-	// Member widgets:
-	// Gtk::HBox panels;      // Main window divided into two horizontal panels
-	// Gtk::VBox butBox;      // Vertical boxes for stacking buttons vertically
-	// Gtk::Button next_button;
-	// Gtk::Button reset_button;
-	// Gtk::Image card;
-
-    int nextCard;
+	int nextCard;
     Suit nextSuit;
     Rank nextFace;
 

@@ -23,6 +23,7 @@ public:
     void startRound(int &);
     void newRound();
     void newGame();
+    std::vector<Card*> getPlayerHand(int) const;
     std::vector<Card*> calculateLegalPlay(Player*) const;
     std::vector<Player*> getPlayers() const;
    void nextButtonClicked();
@@ -46,7 +47,7 @@ private:
     void updatePlayerScores();
     std::vector<Card*> filterBySuit(Suit) const;
     int player_7spades_;
-   RoundModel *model_;
+    RoundModel *model_;
 }; // Controller
 
 

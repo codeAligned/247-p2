@@ -7,14 +7,6 @@ using namespace std;
 
 RoundModel::RoundModel(int seed) : topCard_(-1) {
   deck_ = new Deck(seed);
-  for (int i = 1; i <= 4; ++i) {
-      Player* newPlayer = new ComputerPlayer();
-      players_.push_back( newPlayer );
-  }
-  vector<Hand*> hands = deck_->dealCards();
-  for(int i = 0; i < hands.size(); ++i) {
-      players_.at(i)->setHand(hands.at(i));
-  }
 }
 
 RoundModel::RoundModel(std::vector<Player*> players, Deck* new_deck) {
@@ -24,6 +16,23 @@ RoundModel::RoundModel(std::vector<Player*> players, Deck* new_deck) {
         players.at(i)->setHand(hands.at(i));
     }
     players_ = players;
+}
+
+void RoundModel::setPlayers(bool isHuman[4]) {
+    for (int i = 1; i <= 4; ++i) {
+        if (isHuman[i-1]) {
+            Player* newPlayer = new HumanPlayer();
+            players_.push_back( newPlayer );
+        }
+        else {
+            Player* newPlayer = new ComputerPlayer();
+            players_.push_back( newPlayer );
+        }
+    }
+    vector<Hand*> hands = deck_->dealCards();
+    for(int i = 0; i < hands.size(); ++i) {
+        players_.at(i)->setHand(hands.at(i));
+    }
 }
 
 RoundModel::~RoundModel() {

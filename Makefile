@@ -3,7 +3,7 @@ CXXFLAGS = -std=c++11 -Wall -O -g `pkg-config gtkmm-2.4 --cflags` -MMD
 LDFLAGS=`pkg-config gtkmm-2.4 --libs`
 OBJS = Card.o Command.o Hand.o Player.o HumanPlayer.o ComputerPlayer.o Deck.o RoundModel.o \
 RoundController.o subject.o DeckGUI.o RoundView.o Game.o main.o
-EXEC = mvc
+EXEC = straights
 
 $(EXEC): $(OBJS)
 	$(CXX) $(OBJS) $(CXXFLAGS) $(LDFLAGS) -o $(EXEC)

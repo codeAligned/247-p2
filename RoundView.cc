@@ -19,12 +19,8 @@ RoundView::RoundView(RoundController *c, RoundModel *m) : model_(m), controller_
     nextSuit = (Suit) 0;
     nextFace = (Rank) 0;
 
-    std::cout<<"Making Glib"<<std::endl;
-
     const Glib::RefPtr<Gdk::Pixbuf> nullCardPixbuf = deck.null();
     const Glib::RefPtr<Gdk::Pixbuf> cardPixbuf     = deck.image( ACE, SPADE );
-
-    std::cout<<"Got Glib"<<std::endl;
 
     // Sets the border width of the window.
     set_border_width( 10 );
@@ -53,8 +49,8 @@ RoundView::RoundView(RoundController *c, RoundModel *m) : model_(m), controller_
 
     //Adding the played cards section -----------------------------------
     vbox.add(playedLabel);
-    // Add the horizontal box for laying out the images to the frame.
 
+    // Add the horizontal box for laying out the images to the frame.
     for (int i=0;i<4;i++){
         hboxCards[i] = Gtk::manage(new Gtk::HBox());
         vbox.add( *hboxCards[i] );
@@ -65,22 +61,11 @@ RoundView::RoundView(RoundController *c, RoundModel *m) : model_(m), controller_
         }
     }
 
-    std::cout<<"Finished loop"<<std::endl;
-    // Initialize the 5th card and place the image into the button.
-    //  card[4] = new Gtk::Image( cardPixbuf );
-    // button.set_image( *card[12] );
-    std::cout<<"Finished setting card"<<std::endl;
-
-    // Attach event listener to button
-    // button.signal_clicked().connect(sigc::mem_fun( *this, &RoundView::onButtonClicked));
-
-    // Add the button to the box.
-    // hboxClubs.add( button );
-// Adding player boxes
+    // Adding player boxes
     player_list = Gtk::manage(new Gtk::HBox());
     vbox.pack_start( *player_list );
 
-    for (int i=0;i<4;i++){
+    for (int i = 0; i < 4; i++) {
 
         player_modules[i] = Gtk::manage(new Gtk::VBox());
         player_list->pack_start(*player_modules[i]);
@@ -105,12 +90,10 @@ RoundView::RoundView(RoundController *c, RoundModel *m) : model_(m), controller_
 
         scoreLabels[i] = new Gtk::Label("Score: ");
         player_modules[i]->pack_start(*scoreLabels[i]);
-        
+
         discardLabels[i] = new Gtk::Label("Discards: ");
         player_modules[i]->pack_start(*discardLabels[i]);
     }
-
-    std::cout<<"Tried to make player module"<<std::endl;
 
     // Adding the hand
     vbox.add( handLabel);
@@ -119,14 +102,9 @@ RoundView::RoundView(RoundController *c, RoundModel *m) : model_(m), controller_
     // Initialize 13 empty cards and place them in the box.
     for (int i = 0; i < 13; i++ ) {
         handButtons[i] = new Gtk::Button();
-        // Glib::RefPtr<Gdk::Pixbuf> cardImg = deck.image( static_cast<Rank>(i), SPADE );
-        // handButtons[i]->set_image(*(new Gtk::Image(cardImg)));
         handButtons[i]->set_image(*(new Gtk::Image(nullCardPixbuf)));
-        // card[i] = new Gtk::Image( nullCardPixbuf );
         hboxHand.add(*handButtons[i]);
-        // handButtons[i]->signal_clicked().connect(sigc::mem_fun( *this, &RoundView::onButtonClicked));
         handButtons[i]->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &RoundView::onCardClicked), i) );
-        // handButtons[i]->signal_clicked().connect( sigc::bind<Glib::ustring>( sigc::mem_fun(*this, &RoundView::onCardClicked), "button 1") );
     }
 
     // The final step is to display this newly created widget.
@@ -154,13 +132,30 @@ void RoundView::update() {
   //   card.set( deck.image(face, suit) );
 }
 
+void RoundView::showHand(int player_number) {
+    vector<Card*> hand = controller_->getPlayerHand(player_number);
+     // Change to show player's hand
+    for (int i = 0; i < 13; i++ ) {
+        handButtons[i]->set_image( *(deck.image(hand.at(i)->getRank(), hand.at(i)->getSuit())) );
+        handButtons[i]->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &RoundView::onCardClicked), i) );
+    }
+}
+
 void RoundView::onNewGame(){
-    std::cout<<"New Game. Seed = "<< nameField.get_text() <<std::endl;  
-    for(int i=0;i<4;i++){
+    std::cout<<"New Game. Seed = "<< nameField.get_text() <<std::endl;
+    model_->setPlayers(isHuman);
+    for(int i = 0; i < 4; i++) {
         toggleCompButtons[i]->hide();
         toggleHumanButtons[i]->hide();
         ragequitButtons[i]->show();
+        if (i != controller_->who7Spades()-1) {
+            ragequitButtons[i]->set_sensitive(false);
+        }
     }
+
+    // Make pop up box that says player x's to play
+    // int player_number = controller_->who7Spades();
+    showHand(controller_->who7Spades()-1);
 }
 
 void RoundView::onQuitGame(){
@@ -219,14 +214,6 @@ void RoundView::onButtonClicked()
     std::cout<< "Button clicked"<<std::endl;
 }
 
-void RoundView::nextButtonClicked() {
-  controller_->nextButtonClicked();
-} // RoundView::nextButtonClicked
-
-void RoundView::resetButtonClicked() {
-  controller_->resetButtonClicked();
-} // RoundView::resetButtonClicked
-
 void RoundView::displayScore(std::vector<Player*> players){
     static Gtk::Dialog *dialog = new Gtk::Dialog("End of Round Report");
     Gtk::VBox * reportBox = dialog->get_vbox();
@@ -236,7 +223,7 @@ void RoundView::displayScore(std::vector<Player*> players){
 
     Gtk::Label * scoreReportLabels[4];
     Gtk::Label * discardReportLabels[4];
-    
+
     // dialog->add(*reportBox);
 
     for( int i=0;i<4;i++){
@@ -259,6 +246,6 @@ void RoundView::displayScore(std::vector<Player*> players){
         reportBox->add(*discardReportLabels[i]);
         reportBox->add(*scoreReportLabels[i]);
     }
-    
+
     dialog->show_all();
 }
