@@ -137,30 +137,38 @@ void RoundView::setRagequitButtons(int player_number) {
 }
 
 void RoundView::update() {
-    int player_number = controller_->getCurrentPlayerID();
-    if (controller_->playerIsHuman(player_number)) {
-        cout<<"UPDATE! showing hand for "<< player_number <<endl;
-        setRagequitButtons(player_number);
-        showHand(player_number);
+    if(controller_->getCurrentPlayerHand().size() == 0){
+        cout<<"Round over";
+        controller_->updatePlayerScores();
+        displayScore(controller_->getPlayers());
+    }
+    //TEMPORARY ELSE
+    else{
+        int player_number = controller_->getCurrentPlayerID();
+        if (controller_->playerIsHuman(player_number)) {
+            cout<<"UPDATE! showing hand for "<< player_number <<endl;
+            setRagequitButtons(player_number);
+            showHand(player_number);
 
-        vector<vector<Card*>> playedList = vector<vector<Card*>>();
-        playedList.push_back(controller_->getClubs());
-        playedList.push_back(controller_->getDiamonds());
-        playedList.push_back(controller_->getHearts());
-        playedList.push_back(controller_->getSpades());
+            vector<vector<Card*>> playedList = vector<vector<Card*>>();
+            playedList.push_back(controller_->getClubs());
+            playedList.push_back(controller_->getDiamonds());
+            playedList.push_back(controller_->getHearts());
+            playedList.push_back(controller_->getSpades());
 
-        for (int i=0;i<4;i++){
-            // Initialize 4 empty cards and place them in the box.
-            for (int j = 0; j < playedList.at(i).size(); j++ ) {
-                int loc = (int)playedList.at(i).at(j)->getRank();
-                cout<< 13*i+loc << " is " << *playedList.at(i).at(j)<<endl;
-                card[13*i + loc]->set( deck.image( playedList.at(i).at(j)->getRank(), playedList.at(i).at(j)->getSuit() ) );
+            for (int i=0;i<4;i++){
+                // Initialize 4 empty cards and place them in the box.
+                for (int j = 0; j < playedList.at(i).size(); j++ ) {
+                    int loc = (int)playedList.at(i).at(j)->getRank();
+                    cout<< 13*i+loc << " is " << *playedList.at(i).at(j)<<endl;
+                    card[13*i + loc]->set( deck.image( playedList.at(i).at(j)->getRank(), playedList.at(i).at(j)->getSuit() ) );
+                }
             }
         }
-    }
-    else {
-        cout << "Player " << player_number << " plays it's computer turn" << endl;
-        controller_->playComputerTurn(player_number);
+        else {
+            cout << "Player " << player_number << " plays it's computer turn" << endl;
+            controller_->playComputerTurn(player_number);
+        }
     }
 }
 
@@ -295,15 +303,21 @@ void RoundView::displayScore(vector<Player*> players){
         stringstream ss;
         ss<<i+1;
         // cout<<"# players is "<<players.size()<<endl;
-        // vector<Card*> discards = players.at(i)->getDiscards();
+        vector<Card*> discards = players.at(i)->getDiscards();
+        string discardString = "";
+        for(int i=0;i<discards.size();i++){
+            discardString += discards.at(i)->toString()+" ";
+        }
         // cout<<"# discards is "<<discards.size()<<endl;
-        discardReportLabels[i] = new Gtk::Label("Player " +ss.str()+ "'s discards: ");
+        discardReportLabels[i] = new Gtk::Label("Player " +ss.str()+ "'s discards: "+discardString);
         // cout<<"Discarding"<<endl;
         // for(int j=0;j<discards.size();j++){
         //     cout<<discards.at(j);
         // }
+        stringstream scoreConvert;
+        scoreConvert << players.at(i)->getScore();
 
-        scoreReportLabels[i] = new Gtk::Label("Player " +ss.str()+ "'s score: ");
+        scoreReportLabels[i] = new Gtk::Label("Player " +ss.str()+ "'s score: "+scoreConvert.str());
         // cout<<"Score"<<endl;
         // for(int j=0;j<players.size();j++){
         //     cout<<discards.at(j);

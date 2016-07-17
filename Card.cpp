@@ -16,6 +16,14 @@ Rank Card::getRank() const{
 	return rank_;
 }
 
+string Card::toString() const{
+	string suits[SUIT_COUNT] = {"C", "D", "H", "S"};
+	string ranks[RANK_COUNT] = {"A", "2", "3", "4", "5", "6",
+		"7", "8", "9", "10", "J", "Q", "K"};
+
+	return ranks[rank_] + suits[suit_];
+}
+
 // Check suit and rank are equal
 bool operator==(const Card &a, const Card &b){
 	return a.getSuit() == b.getSuit() && a.getRank() == b.getRank();

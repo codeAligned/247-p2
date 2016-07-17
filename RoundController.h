@@ -42,6 +42,7 @@ public:
     std::vector<Card*> getDiamonds() const;
     std::vector<Card*> getSpades() const;
     std::vector<Card*> getHearts() const;
+    void updatePlayerScores();
     void executeRagequit();
     void ragequit(int);
 private:
@@ -52,7 +53,6 @@ private:
     void turnLoop();
     void startTurns();
     void plusPlayerNum(int&);
-    void updatePlayerScores();
     std::vector<Card*> filterBySuit(Suit) const;
     int currentPlayer_;
     RoundModel *model_;
