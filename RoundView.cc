@@ -139,7 +139,7 @@ void RoundView::update() {
         controller_->updatePlayerScores();
         displayScore(controller_->getPlayers());
         if(controller_->isGameOver()){
-            displayWinner();   
+            displayWinner();
         }
         else{
             controller_->newRound();
@@ -236,6 +236,12 @@ void RoundView::onNewGame(){
 }
 
 void RoundView::onQuitGame(){
+    cleanRound();
+    cleanEndGame();
+    for (int i=0; i < 4; i++) {
+        ragequitButtons[i]->hide();
+        toggleHumanButtons[i]->show();
+    }
     cout<<"Quit Game."<<endl;
 }
 
