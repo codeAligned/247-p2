@@ -3,21 +3,28 @@
 using namespace std;
 
 RoundController::RoundController(RoundModel *m, std::vector<Player*>, int seed)  : model_(m) {
-    player_7spades_ = who7Spades();
+    currentPlayer_ = who7Spades();
 }
 
 void RoundController::newGame(){
-    startRound(player_7spades_);
+    startRound();
 }
 
+void RoundController::setCurrentPlayer(int playerNum){
+    currentPlayer_ = playerNum;
+}
+
+int RoundController::getCurrentPlayerID() const{
+    return currentPlayer_;
+}
 // Loop through each player's hand and check if they have 7 Spades
 int RoundController::who7Spades() const{
     vector<Player*> players = model_->getPlayers();
-    for ( int i = 0; i < players.size(); ++i ) {
+    for ( int i = 0; i < players.size(); i++ ) {
         vector<Card*> tempHand = players.at(i)->getCards();
-        for( int j = 0; j < tempHand.size(); ++j) {
+        for( int j = 0; j < tempHand.size(); j++) {
             if(tempHand.at(j)->getRank() == SEVEN && tempHand.at(j)->getSuit() == SPADE){
-                return i+1;
+                return i;
             }
         }
     }
@@ -26,27 +33,27 @@ int RoundController::who7Spades() const{
 
 // RoundController::~RoundController() {}
 
-void RoundController::startRound(int &player_number) {
+void RoundController::startRound() {
     for(int i = 0; i < 52; ++i) {
-        startTurns(player_number);
+        startTurns();
     }
     updatePlayerScores();
 }
 
-void RoundController::startTurns(int &player_number) {
-    Player* currentPlayer = getPlayer(player_number);
-    if (currentPlayer->isHuman()) {
-        // view_->printHumanInfo(getClubs(), getDiamonds(), getHearts(), getSpades(),
-        //                       currentPlayer->getCards(), calculateLegalPlay(currentPlayer));
-    }
-    turnLoop(player_number);
+void RoundController::startTurns() {
+    Player* currentPlayer = getPlayer(currentPlayer_);
+    // if (currentPlayer->isHuman()) {
+    //     view_->printHumanInfo(getClubs(), getDiamonds(), getHearts(), getSpades(),
+    //                           currentPlayer->getCards(), calculateLegalPlay(currentPlayer));
+    // }
+    // turnLoop();
 }
 
-void RoundController::turnLoop(int &player_number) {
-    int temp_num = player_number;
-    Player* currentPlayer = getPlayer(player_number);
-    while(temp_num == player_number) {
-        currentPlayer = getPlayer(player_number);
+void RoundController::turnLoop() {
+    int temp_num = currentPlayer_;
+    Player* currentPlayer = getPlayer(currentPlayer_);
+    while(temp_num == currentPlayer_) {
+        currentPlayer = getPlayer(currentPlayer_);
         Command cmd;
         if(currentPlayer->isHuman()) {
             cmd = currentPlayer->playTurn(this);
@@ -54,33 +61,37 @@ void RoundController::turnLoop(int &player_number) {
         else{
             cmd = playTurn(currentPlayer);
         }
-        executeCommand(cmd, player_number);
+        executeCommand(cmd);
     }
 }
 
-void RoundController::executeCommand(Command cmd, int &player_number) {
-    Player* currentPlayer = getPlayer(player_number);
+void RoundController::executeCommand(Command cmd) {
+    Player* currentPlayer = getPlayer(currentPlayer_);
     switch (cmd.type){
         case PLAY:
             if ( isLegalPlay(currentPlayer, cmd.card) ) {
                 playCard(currentPlayer, cmd.card);
                 // view_->printPlayMessage(player_number, cmd.card);
-                plusPlayerNum(player_number);
+                plusPlayerNum(currentPlayer_);
+                model_->notifyView();
             }
             else {
                 // view_->printIllegalPlay();
-                executeCommand(currentPlayer->playTurn(this), player_number);
+                cout<<"Illegal Play"<<endl;
+                // executeCommand(currentPlayer->playTurn(this));
             }
             break;
         case DISCARD:
             if (calculateLegalPlay(currentPlayer).size() == 0) {
                 discardCard(currentPlayer, cmd.card);
                 // view_->printDiscardMessage(player_number, cmd.card);
-                plusPlayerNum(player_number);
+                plusPlayerNum(currentPlayer_);
+                model_->notifyView();
             }
             else {
                 // view_->printBadDiscard();
-                executeCommand(currentPlayer->playTurn(this), player_number);
+                cout<<"Illegal Discard"<<endl;
+                // executeCommand(currentPlayer->playTurn(this));
             }
             break;
         case DECK:
@@ -90,7 +101,7 @@ void RoundController::executeCommand(Command cmd, int &player_number) {
             exit(0);
         case RAGEQUIT:
             // view_->printRageQuitMessage(player_number);
-            ragequit(player_number);
+            ragequit(currentPlayer_);
             break;
         default:
             throw "Bad Command";
@@ -121,6 +132,10 @@ Player* RoundController::getPlayer(int playerID) const{
     return model_->getPlayer(playerID);
 }
 
+Player* RoundController::getCurrentPlayer() const{
+    return model_->getPlayer(currentPlayer_);
+}
+
 void RoundController::playCard(Player* p, Card c){
     model_->playCard(c);
     p->playCard(c);
@@ -134,6 +149,11 @@ std::vector<Card*> RoundController::getPlayerHand(int player_number) const {
     Player* p = model_->getPlayer(player_number);
     return p->getCards();
 }
+std::vector<Card*> RoundController::getCurrentPlayerHand() const {
+    Player* p = model_->getPlayer(currentPlayer_);
+    return p->getCards();
+}
+
 
 // Returns vector of legal plays for a player
 vector<Card*> RoundController::calculateLegalPlay(Player* p) const{
@@ -225,10 +245,12 @@ vector<Player*> RoundController::getPlayers() const{
 }
 
 void RoundController::plusPlayerNum(int &player_number) {
+    cout<<"Before: "<<player_number<<endl;
     player_number = player_number+1;
-    if(player_number == 5){
-        player_number = 1;
+    if(player_number == 4){
+        player_number = 0;
     }
+    cout<<"After: "<<player_number<<endl;
 }
 
 void RoundController::nextButtonClicked() {

@@ -20,33 +20,37 @@ public:
     RoundController( RoundModel*, std::vector<Player*>, int seed = 0 );
     // ~RoundController();
     int who7Spades() const;
-    void startRound(int &);
+    void startRound();
     void newRound();
     void newGame();
+    void setCurrentPlayer(int);
+    int getCurrentPlayerID() const;
     std::vector<Card*> getPlayerHand(int) const;
     std::vector<Card*> calculateLegalPlay(Player*) const;
     std::vector<Player*> getPlayers() const;
+    Player* getPlayer(int) const;
+    Player* getCurrentPlayer() const;
+    std::vector<Card*> getCurrentPlayerHand() const;
    void nextButtonClicked();
    void resetButtonClicked();
+    Command playTurn(Player*);
+    void executeCommand(Command);
 private:
     void playCard(Player*, Card);
     void discardCard(Player*, Card);
-    Command playTurn(Player*);
     void ragequit(int);
-    Player* getPlayer(int) const;
     bool isLegalPlay(Player*, Card) const;
     int getRoundScore(Player*) const;
     std::vector<Card*> getClubs() const;
     std::vector<Card*> getDiamonds() const;
     std::vector<Card*> getSpades() const;
     std::vector<Card*> getHearts() const;
-    void executeCommand(Command, int &);
-    void turnLoop(int &);
-    void startTurns(int &);
-    void plusPlayerNum(int &);
+    void turnLoop();
+    void startTurns();
+    void plusPlayerNum(int&);
     void updatePlayerScores();
     std::vector<Card*> filterBySuit(Suit) const;
-    int player_7spades_;
+    int currentPlayer_;
     RoundModel *model_;
 }; // Controller
 

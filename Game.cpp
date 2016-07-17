@@ -9,8 +9,8 @@ Game::Game(int seed) {
     while (!gameOver()) {
         if (round_controller_) {
             round_controller_->newRound();
-            int player_7spades = round_controller_->who7Spades();
-            round_controller_->startRound(player_7spades);
+            // int player_7spades = round_controller_->who7Spades();
+            round_controller_->startRound();
         }
         else {
             Deck* deck = new Deck(seed);

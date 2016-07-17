@@ -124,8 +124,10 @@ RoundView::RoundView(RoundController *c, RoundModel *m) : model_(m), controller_
 RoundView::~RoundView() {}
 
 void RoundView::update() {
-  Suit suit = model_->suit();
-  Rank face = model_->face();
+    std::cout<<"UPDATE! showing hand for "<< controller_->getCurrentPlayerID()<<std::endl;
+    showHand(controller_->getCurrentPlayerID());
+  // Suit suit = model_->suit();
+  // Rank face = model_->face();
   // if ( suit == NOSUIT )
   //   card.set( deck.null() );
   // else
@@ -134,6 +136,7 @@ void RoundView::update() {
 
 void RoundView::showHand(int player_number) {
     vector<Card*> hand = controller_->getPlayerHand(player_number);
+    std::cout<<"Showing "<< player_number<<std::endl;
      // Change to show player's hand
     for (int i = 0; i < hand.size(); i++ ) {
         Gtk::Image* card_image = new Gtk::Image( deck.image(hand.at(i)->getRank(), hand.at(i)->getSuit()) );
@@ -154,9 +157,21 @@ void RoundView::onNewGame(){
         }
     }
 
+    for(int j = 0; j< 4; j++){
+        std::vector<Card*> temphand = controller_->getPlayerHand(j);
+        std::cout<<"Player "<< j << ": "<<std::endl;
+        for (int i = 0; i < temphand.size(); ++i)
+        {
+            std::cout<<*temphand.at(i)<<" ";
+        }
+        std::cout<<std::endl;
+    }
+
+    controller_->setCurrentPlayer(controller_->who7Spades());
+
     // Make pop up box that says player x's to play
     // int player_number = controller_->who7Spades();
-    showHand(controller_->who7Spades()-1);
+    showHand(controller_->who7Spades());
 }
 
 void RoundView::onQuitGame(){
@@ -165,6 +180,24 @@ void RoundView::onQuitGame(){
 
 void RoundView::onCardClicked(int i){
     std::cout<<"Card "<<i<< " clicked."<<std::endl;
+
+    std::vector<Card*> hand = controller_->getCurrentPlayerHand();
+    for(int j = 0; j< 4; j++){
+        std::vector<Card*> temphand = controller_->getPlayerHand(j);
+        std::cout<<"Player "<< j << ": "<<std::endl;
+        for (int i = 0; i < temphand.size(); ++i)
+        {
+            std::cout<<*temphand.at(i)<<" ";
+        }
+        std::cout<<std::endl;
+    }
+
+    std::cout<<hand.size()<<std::endl;
+
+    Command cmd = Command();
+    cmd.type = PLAY;
+    cmd.card = *controller_->getCurrentPlayerHand().at(i);
+    controller_->executeCommand(cmd);
 }
 
 void RoundView::onRagequit(int i){

@@ -24,13 +24,16 @@ void RoundModel::setPlayers(bool isHuman[4]) {
         if (isHuman[i-1]) {
             Player* newPlayer = new HumanPlayer();
             players_.push_back( newPlayer );
+            cout<<"Made player "<<i <<" Human"<<endl;
         }
         else {
             Player* newPlayer = new ComputerPlayer();
             players_.push_back( newPlayer );
+            cout<<"Made player "<<i <<" Computer"<<endl;
         }
     }
     vector<Hand*> hands = deck_->dealCards();
+
     for(int i = 0; i < hands.size(); ++i) {
         players_.at(i)->setHand(hands.at(i));
     }
@@ -48,7 +51,7 @@ vector<Player*> RoundModel::getPlayers() const{
 }
 
 Player* RoundModel::getPlayer(int playerID) const{
-    return players_.at(playerID-1);
+    return players_.at(playerID);
 }
 
 Deck* RoundModel::getDeck() const{
@@ -60,6 +63,7 @@ void RoundModel::playCard(Card c) {
     //TODO should use copy constructor
     Card* newCard = new Card(c.getSuit(),c.getRank());
     played_cards_.push_back(newCard);
+    notify();
 }
 
 vector<Card*> RoundModel::getPlayedCards() const {
@@ -107,8 +111,11 @@ void RoundModel::nextCard() {
   if (topCard_ == numCards-1) return;
 
   topCard_ += 1;
-  notify();
 
+}
+
+void RoundModel::notifyView(){
+    notify();
 }
 
 void RoundModel::resetCards() {

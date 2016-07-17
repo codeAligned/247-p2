@@ -29,6 +29,7 @@ public:
     void nextCard();
     void resetCards();
     void setPlayers(bool[4]);
+    void notifyView();
 private:
     std::vector<Player*> players_;
     std::vector<Card*> played_cards_;
