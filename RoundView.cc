@@ -125,17 +125,21 @@ RoundView::RoundView(RoundController *c, RoundModel *m) : model_(m), controller_
 
 RoundView::~RoundView() {}
 
-void RoundView::update() {
-    int current_player = controller_->getCurrentPlayerID();
-    cout<<"UPDATE! showing hand for "<< current_player <<endl;
+void RoundView::setRagequitButtons(int player_number) {
     for(int i = 0; i < 4; i++) {
-        if (i != current_player) {
+        if (i != player_number) {
             ragequitButtons[i]->set_sensitive(false);
         }
         else {
             ragequitButtons[i]->set_sensitive(true);
         }
     }
+}
+
+void RoundView::update() {
+    int current_player = controller_->getCurrentPlayerID();
+    cout<<"UPDATE! showing hand for "<< current_player <<endl;
+    setRagequitButtons(current_player);
     showHand(current_player);
 
     vector<vector<Card*>> playedList = vector<vector<Card*>>();
@@ -187,11 +191,9 @@ void RoundView::onNewGame(){
         toggleCompButtons[i]->hide();
         toggleHumanButtons[i]->hide();
         ragequitButtons[i]->show();
-        if (i != controller_->who7Spades()) {
-            ragequitButtons[i]->set_sensitive(false);
-        }
     }
 
+    setRagequitButtons(controller_->who7Spades());
     controller_->setCurrentPlayer(controller_->who7Spades());
 
     // Make pop up box that says player x's to play
