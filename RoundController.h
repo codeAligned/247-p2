@@ -42,6 +42,7 @@ public:
     std::vector<Card*> getDiamonds() const;
     std::vector<Card*> getSpades() const;
     std::vector<Card*> getHearts() const;
+    void executeRagequit();
     void ragequit(int);
 private:
     void playCard(Player*, Card);

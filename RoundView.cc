@@ -230,9 +230,9 @@ void RoundView::onCardClicked(int i){
     controller_->determinePlay(controller_->getCurrentPlayer(),*hand.at(i));
 }
 
-void RoundView::onRagequit(int i) {
-    controller_->ragequit(i);
-    cout<<"Player "<<i+1<< " ragequit."<<endl;
+void RoundView::onRagequit(int player_number) {
+    controller_->executeRagequit();
+    cout<<"Player "<<player_number+1<< " ragequit."<<endl;
 }
 
 void RoundView::onRoundEnd(){

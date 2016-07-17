@@ -65,6 +65,12 @@ void RoundController::turnLoop() {
     }
 }
 
+void RoundController::executeRagequit() {
+    Command cmd = Command();
+    cmd.type = RAGEQUIT;
+    executeCommand(cmd);
+}
+
 void RoundController::executeCommand(Command cmd) {
     Player* currentPlayer = getPlayer(currentPlayer_);
     switch (cmd.type){
@@ -104,6 +110,8 @@ void RoundController::executeCommand(Command cmd) {
         case RAGEQUIT:
             // view_->printRageQuitMessage(player_number);
             ragequit(currentPlayer_);
+            plusPlayerNum(currentPlayer_);
+            model_->notifyView();
             break;
         default:
             throw "Bad Command";

@@ -72,7 +72,6 @@ vector<Card*> RoundModel::getPlayedCards() const {
 
 // Delete player with id playerID and replace with newPlayer
 void RoundModel::ragequit(int playerID, Player* newPlayer) {
-    --playerID;
     Player* temp = players_.at(playerID);
     players_.at(playerID) = newPlayer;
     delete temp;
