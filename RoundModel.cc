@@ -63,7 +63,7 @@ void RoundModel::playCard(Card c) {
     //TODO should use copy constructor
     Card* newCard = new Card(c.getSuit(),c.getRank());
     played_cards_.push_back(newCard);
-    notify();
+    // notify();
 }
 
 vector<Card*> RoundModel::getPlayedCards() const {
