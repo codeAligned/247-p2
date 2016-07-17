@@ -278,6 +278,7 @@ void RoundController::ragequit(int player_number) {
 void RoundController::newRound() {
     model_->newRound();
     currentPlayer_ = who7Spades();
+    model_->notifyView();
     // view_->printNewRound(who7Spades());
 }
 
@@ -319,15 +320,12 @@ vector<int> RoundController::getWinners() const{
     int min_score = players_.at(0)->getScore();
     for (int i = 0; i < players_.size(); i++) {
         if (players_.at(i)->getScore() < min_score) {
-            min_score = players_.at(i)->getScore();
-            cout<<"min is: "<<min_score<<endl;
-        }
+            min_score = players_.at(i)->getScore();        }
     }
 
     for (int i = 0; i < players_.size(); i++) {
         if (players_.at(i)->getScore() == min_score) {
             winners.push_back(i);
-            cout<<i;
         }
     }
     return winners;

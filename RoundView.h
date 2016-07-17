@@ -22,7 +22,6 @@ class RoundModel;
 class RoundView : public Gtk::Window, public Observer {
 public:
     RoundView( RoundController*, RoundModel* );
-    void onButtonClicked();
     void onNewGame();
     void onCardClicked(int);
     void onRagequit(int);

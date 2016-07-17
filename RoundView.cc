@@ -45,9 +45,6 @@ RoundView::RoundView(RoundController *c, RoundModel *m) : model_(m), controller_
     nameField.set_text( "0" );
     control_panel.add(quit_game);
     quit_game.signal_clicked().connect(sigc::mem_fun( *this, &RoundView::onQuitGame));
-    testButton.set_label("TEST ROUND END");
-    control_panel.pack_start( testButton );
-    testButton.signal_clicked().connect(sigc::mem_fun( *this, &RoundView::onRoundEnd));
 
     //Adding the played cards section -----------------------------------
     vbox.add(playedLabel);
@@ -148,7 +145,6 @@ void RoundView::update() {
             controller_->newRound();
         }
     }
-    //TEMPORARY ELSE
     else{
         int player_number = controller_->getCurrentPlayerID();
         if (controller_->playerIsHuman(player_number)) {
@@ -219,6 +215,10 @@ void RoundView::onNewGame(){
     // Make pop up box that says player x's to play
     // int player_number = controller_->who7Spades();
     showHand(controller_->who7Spades());
+
+    if(!controller_->playerIsHuman(controller_->who7Spades())){
+        controller_->playComputerTurn(controller_->who7Spades());
+    }
 }
 
 void RoundView::onQuitGame(){
@@ -276,25 +276,8 @@ void RoundView::onComputerToggle(int i){
     toggleHumanButtons[i]->show();
 }
 
-void RoundView::onButtonClicked()
-{
-    card[nextCard]->set(deck.image(nextFace, nextSuit));
-
-    nextCard = (nextCard+1) % 13;
-    if( (nextFace+1) == 13)
-    {
-        nextFace = (Rank) 0;
-        nextSuit = (Suit) ((nextSuit + 1) % 4);
-    }
-    else
-    {
-        nextFace = (Rank) (nextFace+1);
-    }
-    cout<< "Button clicked"<<endl;
-}
-
 void RoundView::displayScore(vector<Player*> players){
-    static Gtk::Dialog *dialog = new Gtk::Dialog("End of Round Report");
+    Gtk::Dialog *dialog = new Gtk::Dialog("End of Round Report");
     Gtk::VBox * reportBox = dialog->get_vbox();
 
     /* Set title */
@@ -333,6 +316,8 @@ void RoundView::displayScore(vector<Player*> players){
     }
 
     dialog->show_all();
+    dialog->run();
+    delete dialog;
 }
 
 void RoundView::displayWinner(){
