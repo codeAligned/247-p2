@@ -141,6 +141,12 @@ void RoundView::update() {
         cout<<"Round over";
         controller_->updatePlayerScores();
         displayScore(controller_->getPlayers());
+        if(controller_->isGameOver()){
+            displayWinner();   
+        }
+        else{
+            controller_->newRound();
+        }
     }
     //TEMPORARY ELSE
     else{
@@ -325,6 +331,24 @@ void RoundView::displayScore(vector<Player*> players){
         reportBox->add(*discardReportLabels[i]);
         reportBox->add(*scoreReportLabels[i]);
     }
+
+    dialog->show_all();
+}
+
+void RoundView::displayWinner(){
+    static Gtk::Dialog *dialog = new Gtk::Dialog("Game Over");
+    Gtk::VBox * reportBox = dialog->get_vbox();
+
+    vector<int> winners = controller_->getWinners();
+    for (int i =0; i<winners.size();i++){
+        stringstream ss;
+        ss<<winners.at(i);
+        Gtk::Label * winnerLabel = new Gtk::Label("Player "+ ss.str() +" wins!");
+        reportBox->add(*winnerLabel);
+    }
+
+    /* Set title */
+    dialog->set_title("Game Over");
 
     dialog->show_all();
 }

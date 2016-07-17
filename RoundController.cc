@@ -277,6 +277,7 @@ void RoundController::ragequit(int player_number) {
 
 void RoundController::newRound() {
     model_->newRound();
+    currentPlayer_ = who7Spades();
     // view_->printNewRound(who7Spades());
 }
 
@@ -300,4 +301,34 @@ void RoundController::nextButtonClicked() {
 
 void RoundController::resetButtonClicked() {
      model_->resetCards();
+}
+
+bool RoundController::isGameOver() const{
+    vector<Player*> players_ = model_->getPlayers();
+    for(int i= 0; i < players_.size(); i++) {
+        if (players_.at(i)->getScore() >= 80) {
+            return true;
+        }
+    }
+    return false;
+}
+
+vector<int> RoundController::getWinners() const{
+    vector<int> winners = vector<int>();
+    vector<Player*> players_ = model_->getPlayers();
+    int min_score = players_.at(0)->getScore();
+    for (int i = 0; i < players_.size(); i++) {
+        if (players_.at(i)->getScore() < min_score) {
+            min_score = players_.at(i)->getScore();
+            cout<<"min is: "<<min_score<<endl;
+        }
+    }
+
+    for (int i = 0; i < players_.size(); i++) {
+        if (players_.at(i)->getScore() == min_score) {
+            winners.push_back(i);
+            cout<<i;
+        }
+    }
+    return winners;
 }

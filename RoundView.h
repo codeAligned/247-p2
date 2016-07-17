@@ -32,6 +32,7 @@ public:
     void onRoundEnd();
 
     void displayScore(std::vector<Player*>);
+    void displayWinner();
 
 	virtual ~RoundView();
 	virtual void update();	// Observer Pattern: concrete update() method

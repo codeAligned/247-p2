@@ -45,6 +45,8 @@ public:
     void updatePlayerScores();
     void executeRagequit();
     void ragequit(int);
+    bool isGameOver() const;
+    std::vector<int> getWinners() const;
 private:
     void playCard(Player*, Card);
     void discardCard(Player*, Card);
