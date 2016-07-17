@@ -126,15 +126,20 @@ RoundView::~RoundView() {}
 void RoundView::update() {
     std::cout<<"UPDATE! showing hand for "<< controller_->getCurrentPlayerID()<<std::endl;
     showHand(controller_->getCurrentPlayerID());
-  // Suit suit = model_->suit();
-  // Rank face = model_->face();
-  // if ( suit == NOSUIT )
-  //   card.set( deck.null() );
-  // else
-  //   card.set( deck.image(face, suit) );
 }
 
 void RoundView::showHand(int player_number) {
+
+    for(int j = 0; j< 4; j++){
+        std::vector<Card*> temphand = controller_->getPlayerHand(j);
+        std::cout<<"Player "<< j << ": "<<std::endl;
+        for (int i = 0; i < temphand.size(); ++i)
+        {
+            std::cout<<*temphand.at(i)<<" ";
+        }
+        std::cout<<std::endl;
+    }
+
     vector<Card*> hand = controller_->getPlayerHand(player_number);
     std::cout<<"Showing "<< player_number<<std::endl;
      // Change to show player's hand
@@ -142,6 +147,10 @@ void RoundView::showHand(int player_number) {
         Gtk::Image* card_image = new Gtk::Image( deck.image(hand.at(i)->getRank(), hand.at(i)->getSuit()) );
         handButtons[i]->set_image(*(card_image));
         // handButtons[i]->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &RoundView::onCardClicked), i) );
+    }
+    for( int j = hand.size(); j< 13; j++){
+        Gtk::Image* card_image = new Gtk::Image( deck.null() );
+        handButtons[j]->set_image(*(card_image));
     }
 }
 
@@ -155,16 +164,6 @@ void RoundView::onNewGame(){
         if (i != controller_->who7Spades()) {
             ragequitButtons[i]->set_sensitive(false);
         }
-    }
-
-    for(int j = 0; j< 4; j++){
-        std::vector<Card*> temphand = controller_->getPlayerHand(j);
-        std::cout<<"Player "<< j << ": "<<std::endl;
-        for (int i = 0; i < temphand.size(); ++i)
-        {
-            std::cout<<*temphand.at(i)<<" ";
-        }
-        std::cout<<std::endl;
     }
 
     controller_->setCurrentPlayer(controller_->who7Spades());
