@@ -35,6 +35,7 @@ public:
    void resetButtonClicked();
     Command playTurn(Player*);
     void executeCommand(Command);
+    bool determinePlay(Player*, Card);
 private:
     void playCard(Player*, Card);
     void discardCard(Player*, Card);

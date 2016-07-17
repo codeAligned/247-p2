@@ -70,6 +70,7 @@ void RoundController::executeCommand(Command cmd) {
     switch (cmd.type){
         case PLAY:
             if ( isLegalPlay(currentPlayer, cmd.card) ) {
+                cout<<"Played: "<<cmd.card<<endl;
                 playCard(currentPlayer, cmd.card);
                 // view_->printPlayMessage(player_number, cmd.card);
                 plusPlayerNum(currentPlayer_);
@@ -83,6 +84,7 @@ void RoundController::executeCommand(Command cmd) {
             break;
         case DISCARD:
             if (calculateLegalPlay(currentPlayer).size() == 0) {
+                cout<<"Discarded: "<<cmd.card<<endl;
                 discardCard(currentPlayer, cmd.card);
                 // view_->printDiscardMessage(player_number, cmd.card);
                 plusPlayerNum(currentPlayer_);
@@ -154,6 +156,25 @@ std::vector<Card*> RoundController::getCurrentPlayerHand() const {
     return p->getCards();
 }
 
+//true = executed
+//false = play was illegal
+bool RoundController::determinePlay(Player* p, Card c){
+    Command cmd = Command();
+
+    if( calculateLegalPlay(p).size()==0 ){
+        cmd.type = DISCARD;
+        cmd.card = c;
+        executeCommand(cmd);
+        return true;
+    }
+    else if(isLegalPlay(p,c)){
+        cmd.type = PLAY;
+        cmd.card = c;
+        executeCommand(cmd);
+        return true;
+    }
+    return false;
+}
 
 // Returns vector of legal plays for a player
 vector<Card*> RoundController::calculateLegalPlay(Player* p) const{

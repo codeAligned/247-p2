@@ -141,7 +141,7 @@ void RoundView::showHand(int player_number) {
     for (int i = 0; i < hand.size(); i++ ) {
         Gtk::Image* card_image = new Gtk::Image( deck.image(hand.at(i)->getRank(), hand.at(i)->getSuit()) );
         handButtons[i]->set_image(*(card_image));
-        handButtons[i]->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &RoundView::onCardClicked), i) );
+        // handButtons[i]->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &RoundView::onCardClicked), i) );
     }
 }
 
@@ -194,10 +194,7 @@ void RoundView::onCardClicked(int i){
 
     std::cout<<hand.size()<<std::endl;
 
-    Command cmd = Command();
-    cmd.type = PLAY;
-    cmd.card = *controller_->getCurrentPlayerHand().at(i);
-    controller_->executeCommand(cmd);
+    controller_->determinePlay(controller_->getCurrentPlayer(),*hand.at(i));
 }
 
 void RoundView::onRagequit(int i){
