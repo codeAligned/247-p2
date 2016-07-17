@@ -152,7 +152,7 @@ void RoundView::onNewGame(){
         toggleCompButtons[i]->hide();
         toggleHumanButtons[i]->hide();
         ragequitButtons[i]->show();
-        if (i != controller_->who7Spades()-1) {
+        if (i != controller_->who7Spades()) {
             ragequitButtons[i]->set_sensitive(false);
         }
     }
