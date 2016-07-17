@@ -126,6 +126,21 @@ RoundView::~RoundView() {}
 void RoundView::update() {
     std::cout<<"UPDATE! showing hand for "<< controller_->getCurrentPlayerID()<<std::endl;
     showHand(controller_->getCurrentPlayerID());
+
+    std::vector<std::vector<Card*>> playedList = std::vector<std::vector<Card*>>();
+    playedList.push_back(controller_->getClubs());
+    playedList.push_back(controller_->getDiamonds());
+    playedList.push_back(controller_->getHearts());
+    playedList.push_back(controller_->getSpades());
+
+    for (int i=0;i<4;i++){
+        // Initialize 4 empty cards and place them in the box.
+        for (int j = 0; j < playedList.at(i).size(); j++ ) {
+            int loc = (int)playedList.at(i).at(j)->getRank();
+            std::cout<< 13*i+loc << " is " << *playedList.at(i).at(j)<<std::endl;
+            card[13*i + loc]->set( deck.image( playedList.at(i).at(j)->getRank(), playedList.at(i).at(j)->getSuit() ) );
+        }
+    }
 }
 
 void RoundView::showHand(int player_number) {

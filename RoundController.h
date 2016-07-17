@@ -36,16 +36,16 @@ public:
     Command playTurn(Player*);
     void executeCommand(Command);
     bool determinePlay(Player*, Card);
+    std::vector<Card*> getClubs() const;
+    std::vector<Card*> getDiamonds() const;
+    std::vector<Card*> getSpades() const;
+    std::vector<Card*> getHearts() const;
 private:
     void playCard(Player*, Card);
     void discardCard(Player*, Card);
     void ragequit(int);
     bool isLegalPlay(Player*, Card) const;
     int getRoundScore(Player*) const;
-    std::vector<Card*> getClubs() const;
-    std::vector<Card*> getDiamonds() const;
-    std::vector<Card*> getSpades() const;
-    std::vector<Card*> getHearts() const;
     void turnLoop();
     void startTurns();
     void plusPlayerNum(int&);
