@@ -167,6 +167,19 @@ void RoundView::update() {
                     card[13*i + loc]->set( deck.image( playedList.at(i).at(j)->getRank(), playedList.at(i).at(j)->getSuit() ) );
                 }
             }
+
+            vector<Player*> players = controller_->getPlayers();
+            for( int i=0;i<4;i++ ){
+                vector<Card*> discards = players.at(i)->getDiscards();
+                string discardString = "";
+                for(int i=0;i<discards.size();i++){
+                    discardString += discards.at(i)->toString()+" ";
+                }
+                discardLabels[i]->set_label("Discards: " + discardString);
+                stringstream ss;
+                ss<<players.at(i)->getScore();
+                scoreLabels[i]->set_label("Score: " + ss.str());
+            }
         }
         else {
             cout << "Player " << player_number << " plays it's computer turn" << endl;
