@@ -173,6 +173,7 @@ bool RoundController::determinePlay(Player* p, Card c){
         executeCommand(cmd);
         return true;
     }
+    cout << "This is not a legal play" << endl;
     return false;
 }
 

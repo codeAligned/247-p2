@@ -8,6 +8,8 @@
 #include <iostream>
 #include <sstream>
 
+using namespace std;
+
 // Creates buttons with labels. Sets butBox elements to have the same size,
 // with 10 pixels between widgets
 RoundView::RoundView(RoundController *c, RoundModel *m) : model_(m), controller_(c), playedLabel("Played cards:"),
@@ -70,7 +72,7 @@ RoundView::RoundView(RoundController *c, RoundModel *m) : model_(m), controller_
         player_modules[i] = Gtk::manage(new Gtk::VBox());
         player_list->pack_start(*player_modules[i]);
 
-        std::stringstream ss;
+        stringstream ss;
         ss << i+1;
         pLabels[i] = new Gtk::Label("Player " + ss.str());
         player_modules[i]->pack_start(*pLabels[i]);
@@ -124,10 +126,19 @@ RoundView::RoundView(RoundController *c, RoundModel *m) : model_(m), controller_
 RoundView::~RoundView() {}
 
 void RoundView::update() {
-    std::cout<<"UPDATE! showing hand for "<< controller_->getCurrentPlayerID()<<std::endl;
-    showHand(controller_->getCurrentPlayerID());
+    int current_player = controller_->getCurrentPlayerID();
+    cout<<"UPDATE! showing hand for "<< current_player <<endl;
+    for(int i = 0; i < 4; i++) {
+        if (i != current_player) {
+            ragequitButtons[i]->set_sensitive(false);
+        }
+        else {
+            ragequitButtons[i]->set_sensitive(true);
+        }
+    }
+    showHand(current_player);
 
-    std::vector<std::vector<Card*>> playedList = std::vector<std::vector<Card*>>();
+    vector<vector<Card*>> playedList = vector<vector<Card*>>();
     playedList.push_back(controller_->getClubs());
     playedList.push_back(controller_->getDiamonds());
     playedList.push_back(controller_->getHearts());
@@ -137,7 +148,7 @@ void RoundView::update() {
         // Initialize 4 empty cards and place them in the box.
         for (int j = 0; j < playedList.at(i).size(); j++ ) {
             int loc = (int)playedList.at(i).at(j)->getRank();
-            std::cout<< 13*i+loc << " is " << *playedList.at(i).at(j)<<std::endl;
+            cout<< 13*i+loc << " is " << *playedList.at(i).at(j)<<endl;
             card[13*i + loc]->set( deck.image( playedList.at(i).at(j)->getRank(), playedList.at(i).at(j)->getSuit() ) );
         }
     }
@@ -146,17 +157,17 @@ void RoundView::update() {
 void RoundView::showHand(int player_number) {
 
     for(int j = 0; j< 4; j++){
-        std::vector<Card*> temphand = controller_->getPlayerHand(j);
-        std::cout<<"Player "<< j << ": "<<std::endl;
+        vector<Card*> temphand = controller_->getPlayerHand(j);
+        cout<<"Player "<< j << ": "<<endl;
         for (int i = 0; i < temphand.size(); ++i)
         {
-            std::cout<<*temphand.at(i)<<" ";
+            cout<<*temphand.at(i)<<" ";
         }
-        std::cout<<std::endl;
+        cout<<endl;
     }
 
     vector<Card*> hand = controller_->getPlayerHand(player_number);
-    std::cout<<"Showing "<< player_number<<std::endl;
+    cout<<"Showing "<< player_number<<endl;
      // Change to show player's hand
     for (int i = 0; i < hand.size(); i++ ) {
         Gtk::Image* card_image = new Gtk::Image( deck.image(hand.at(i)->getRank(), hand.at(i)->getSuit()) );
@@ -170,7 +181,7 @@ void RoundView::showHand(int player_number) {
 }
 
 void RoundView::onNewGame(){
-    std::cout<<"New Game. Seed = "<< nameField.get_text() <<std::endl;
+    cout<<"New Game. Seed = "<< nameField.get_text() <<endl;
     model_->setPlayers(isHuman);
     for(int i = 0; i < 4; i++) {
         toggleCompButtons[i]->hide();
@@ -189,35 +200,36 @@ void RoundView::onNewGame(){
 }
 
 void RoundView::onQuitGame(){
-    std::cout<<"Quit Game."<<std::endl;
+    cout<<"Quit Game."<<endl;
 }
 
 void RoundView::onCardClicked(int i){
-    std::cout<<"Card "<<i<< " clicked."<<std::endl;
+    cout<<"Card "<<i<< " clicked."<<endl;
 
-    std::vector<Card*> hand = controller_->getCurrentPlayerHand();
+    vector<Card*> hand = controller_->getCurrentPlayerHand();
     for(int j = 0; j< 4; j++){
-        std::vector<Card*> temphand = controller_->getPlayerHand(j);
-        std::cout<<"Player "<< j << ": "<<std::endl;
+        vector<Card*> temphand = controller_->getPlayerHand(j);
+        cout<<"Player "<< j << ": "<<endl;
         for (int i = 0; i < temphand.size(); ++i)
         {
-            std::cout<<*temphand.at(i)<<" ";
+            cout<<*temphand.at(i)<<" ";
         }
-        std::cout<<std::endl;
+        cout<<endl;
     }
 
-    std::cout<<hand.size()<<std::endl;
+    cout<<hand.size()<<endl;
 
     controller_->determinePlay(controller_->getCurrentPlayer(),*hand.at(i));
 }
 
 void RoundView::onRagequit(int i){
-    std::cout<<"Player "<<i+1<< " ragequit."<<std::endl;
+    controller_->ragequit(i);
+    cout<<"Player "<<i+1<< " ragequit."<<endl;
 }
 
 void RoundView::onRoundEnd(){
-    std::cout<<"Round ends."<<std::endl;
-    std::vector<Player*> players_ = std::vector<Player*>();
+    cout<<"Round ends."<<endl;
+    vector<Player*> players_ = vector<Player*>();
     for (int i = 0; i <= 4; i++) {
       Player* newPlayer = new ComputerPlayer();
       players_.push_back( newPlayer );
@@ -229,14 +241,14 @@ void RoundView::onRoundEnd(){
 }
 
 void RoundView::onHumanToggle(int i){
-    std::cout<<"Player "<<i+1<<" is now Computer."<<std::endl;
+    cout<<"Player "<<i+1<<" is now Computer."<<endl;
     isHuman[i]=false;
     toggleHumanButtons[i]->hide();
     toggleCompButtons[i]->show();
 }
 
 void RoundView::onComputerToggle(int i){
-    std::cout<<"Player "<<i+1<<" is now Human."<<std::endl;
+    cout<<"Player "<<i+1<<" is now Human."<<endl;
     isHuman[i]=true;
     toggleCompButtons[i]->hide();
     toggleHumanButtons[i]->show();
@@ -256,10 +268,10 @@ void RoundView::onButtonClicked()
     {
         nextFace = (Rank) (nextFace+1);
     }
-    std::cout<< "Button clicked"<<std::endl;
+    cout<< "Button clicked"<<endl;
 }
 
-void RoundView::displayScore(std::vector<Player*> players){
+void RoundView::displayScore(vector<Player*> players){
     static Gtk::Dialog *dialog = new Gtk::Dialog("End of Round Report");
     Gtk::VBox * reportBox = dialog->get_vbox();
 
@@ -272,21 +284,21 @@ void RoundView::displayScore(std::vector<Player*> players){
     // dialog->add(*reportBox);
 
     for( int i=0;i<4;i++){
-        std::stringstream ss;
+        stringstream ss;
         ss<<i+1;
-        // std::cout<<"# players is "<<players.size()<<std::endl;
-        // std::vector<Card*> discards = players.at(i)->getDiscards();
-        // std::cout<<"# discards is "<<discards.size()<<std::endl;
+        // cout<<"# players is "<<players.size()<<endl;
+        // vector<Card*> discards = players.at(i)->getDiscards();
+        // cout<<"# discards is "<<discards.size()<<endl;
         discardReportLabels[i] = new Gtk::Label("Player " +ss.str()+ "'s discards: ");
-        // std::cout<<"Discarding"<<std::endl;
+        // cout<<"Discarding"<<endl;
         // for(int j=0;j<discards.size();j++){
-        //     std::cout<<discards.at(j);
+        //     cout<<discards.at(j);
         // }
 
         scoreReportLabels[i] = new Gtk::Label("Player " +ss.str()+ "'s score: ");
-        // std::cout<<"Score"<<std::endl;
+        // cout<<"Score"<<endl;
         // for(int j=0;j<players.size();j++){
-        //     std::cout<<discards.at(j);
+        //     cout<<discards.at(j);
         // }
         reportBox->add(*discardReportLabels[i]);
         reportBox->add(*scoreReportLabels[i]);
