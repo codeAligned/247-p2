@@ -135,8 +135,9 @@ void RoundView::update() {
 void RoundView::showHand(int player_number) {
     vector<Card*> hand = controller_->getPlayerHand(player_number);
      // Change to show player's hand
-    for (int i = 0; i < 13; i++ ) {
-        handButtons[i]->set_image( *(deck.image(hand.at(i)->getRank(), hand.at(i)->getSuit())) );
+    for (int i = 0; i < hand.size(); i++ ) {
+        std::cout << "i is " << i << ". Hand is " <<  hand.at(i)->getRank() << hand.at(i)->getSuit() << std::endl;
+        handButtons[i]->set_image(*(new Gtk::Image( deck.image(hand.at(i)->getRank(), hand.at(i)->getSuit()) )));
         handButtons[i]->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &RoundView::onCardClicked), i) );
     }
 }
