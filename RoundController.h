@@ -22,7 +22,7 @@ public:
     int who7Spades() const;
     void startRound();
     void newRound();
-    void newGame();
+    void newGame(int);
     void setCurrentPlayer(int);
     int getCurrentPlayerID() const;
     std::vector<Card*> getPlayerHand(int) const;

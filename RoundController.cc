@@ -6,8 +6,9 @@ RoundController::RoundController(RoundModel *m, std::vector<Player*>, int seed) 
     currentPlayer_ = who7Spades();
 }
 
-void RoundController::newGame(){
-    startRound();
+void RoundController::newGame(int seed){
+    currentPlayer_ = who7Spades();
+    model_->updateDeck(seed);
 }
 
 void RoundController::setCurrentPlayer(int playerNum){
@@ -129,7 +130,8 @@ int RoundController::getRoundScore(Player* p) const {
 
 void RoundController::updatePlayerScores() {
     vector<Player*> players = model_->getPlayers();
-    for (int i = 0; i < players.size(); ++i) {
+    cout<<"Got "<<players.size()<<"players"<<endl;
+    for (int i = 0; i < players.size(); i++) {
         Player* current_player = players.at(i);
         int current_score = current_player->getScore();
         int round_score = getRoundScore( current_player );

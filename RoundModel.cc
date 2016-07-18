@@ -15,6 +15,12 @@ void RoundModel::updateDeck(int seed) {
     delete deck_;
     deck_ = new Deck(seed);
     deck_->shuffle();
+    vector<Hand*> hands_ = deck_->dealCards();
+    vector<Card*> played_cards_ = vector<Card*>();
+    for(int i=0; i<players_.size();i++){
+        players_.at(i)->setScore(0);
+        players_.at(i)->setHand(hands_.at(i));
+    }
 }
 
 RoundModel::RoundModel(std::vector<Player*> players, Deck* new_deck) {
@@ -27,22 +33,24 @@ RoundModel::RoundModel(std::vector<Player*> players, Deck* new_deck) {
 }
 
 void RoundModel::setPlayers(bool isHuman[4]) {
-    for (int i = 1; i <= 4; ++i) {
-        if (isHuman[i-1]) {
-            Player* newPlayer = new HumanPlayer();
-            players_.push_back( newPlayer );
-            cout<<"Made player "<<i <<" Human"<<endl;
+    if(players_.size()==0){
+        for (int i = 1; i <= 4; ++i) {
+            if (isHuman[i-1]) {
+                Player* newPlayer = new HumanPlayer();
+                players_.push_back( newPlayer );
+                cout<<"Made player "<<i <<" Human"<<endl;
+            }
+            else {
+                Player* newPlayer = new ComputerPlayer();
+                players_.push_back( newPlayer );
+                cout<<"Made player "<<i <<" Computer"<<endl;
+            }
         }
-        else {
-            Player* newPlayer = new ComputerPlayer();
-            players_.push_back( newPlayer );
-            cout<<"Made player "<<i <<" Computer"<<endl;
-        }
-    }
-    vector<Hand*> hands = deck_->dealCards();
+        vector<Hand*> hands = deck_->dealCards();
 
-    for(int i = 0; i < hands.size(); ++i) {
-        players_.at(i)->setHand(hands.at(i));
+        for(int i = 0; i < hands.size(); ++i) {
+            players_.at(i)->setHand(hands.at(i));
+        }
     }
 }
 

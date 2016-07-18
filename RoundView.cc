@@ -134,9 +134,11 @@ void RoundView::setRagequitButtons(int player_number) {
 }
 
 void RoundView::update() {
+    cout<<"UPDATING"<<endl;
     if(controller_->getCurrentPlayerHand().size() == 0){
-        cout<<"Round over";
+        cout<<"Round over"<<endl;
         controller_->updatePlayerScores();
+        cout<<"updating player scores"<<endl;
         displayScore(controller_->getPlayers());
         if(controller_->isGameOver()){
             displayWinner();
@@ -221,7 +223,7 @@ void RoundView::onNewGame(){
     int seed;
     text << nameField.get_text().raw();
     text >> seed;
-    model_->updateDeck(seed);
+    controller_->newGame(seed);
 
     model_->setPlayers(isHuman);
     for(int i = 0; i < 4; i++) {
