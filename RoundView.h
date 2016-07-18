@@ -58,6 +58,7 @@ private:
     Gtk::Image * card[52];          // Images to display.
     Gtk::Image * hand[13];          // Images to display.
     // Gtk::Button button;           // Button that will hold an image.
+    Gtk::EventBox * handButtonsBack[13];
     Gtk::Button * handButtons[13];
     Gtk::HBox * hboxCards[4];
     Gtk::HBox hboxHand;

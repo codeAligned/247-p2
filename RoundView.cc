@@ -100,9 +100,15 @@ RoundView::RoundView(RoundController *c, RoundModel *m) : model_(m), controller_
 
     // Initialize 13 empty cards and place them in the box.
     for (int i = 0; i < 13; i++ ) {
+
         handButtons[i] = new Gtk::Button();
         handButtons[i]->set_image(*(new Gtk::Image(nullCardPixbuf)));
-        hboxHand.add(*handButtons[i]);
+
+        handButtonsBack[i] = new Gtk::EventBox();
+
+        hboxHand.add(*handButtonsBack[i]);
+        handButtonsBack[i]->add(*handButtons[i]);
+
         handButtons[i]->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &RoundView::onCardClicked), i) );
     }
 
@@ -205,11 +211,19 @@ void RoundView::showHand(int player_number) {
      // Change to show player's hand
     for (int i = 0; i < hand.size(); i++ ) {
         Gtk::Image* card_image = new Gtk::Image( deck.image(hand.at(i)->getRank(), hand.at(i)->getSuit()) );
+        if(controller_->isLegalPlay(controller_->getCurrentPlayer(),*hand.at(i))){
+            handButtonsBack[i]->modify_bg(Gtk::STATE_NORMAL, Gdk::Color("green"));
+        }
+        else{
+            handButtonsBack[i]->modify_bg(Gtk::STATE_NORMAL, Gdk::Color("gray"));
+        }
         handButtons[i]->set_image(*(card_image));
+        handButtons[i]->set_border_width(10);
         // handButtons[i]->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &RoundView::onCardClicked), i) );
     }
     for( int j = hand.size(); j< 13; j++){
         Gtk::Image* card_image = new Gtk::Image( deck.null() );
+        handButtonsBack[j]->modify_bg(Gtk::STATE_NORMAL, Gdk::Color("gray"));
         handButtons[j]->set_image(*(card_image));
     }
 }
@@ -406,5 +420,6 @@ void RoundView::cleanEndGame(){
         Gtk::Image* card_image = new Gtk::Image( deck.null() );
         handButtons[i]->set_image(*(card_image));
         handButtons[i]->set_sensitive(false);
+        handButtonsBack[i]->modify_bg(Gtk::STATE_NORMAL, Gdk::Color("gray"));
     }
 }
