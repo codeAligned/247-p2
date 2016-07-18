@@ -230,6 +230,10 @@ void RoundView::onNewGame(){
         ragequitButtons[i]->show();
     }
 
+    for(int i = 0;i<13;i++){
+        handButtons[i]->set_sensitive(true);
+    }
+
     setRagequitButtons(controller_->who7Spades());
     controller_->setCurrentPlayer(controller_->who7Spades());
 
@@ -391,5 +395,6 @@ void RoundView::cleanEndGame(){
     for (int i=0;i<13;i++){
         Gtk::Image* card_image = new Gtk::Image( deck.null() );
         handButtons[i]->set_image(*(card_image));
+        handButtons[i]->set_sensitive(false);
     }
 }
