@@ -7,7 +7,7 @@ using namespace std;
 
 RoundModel::RoundModel(int seed) : topCard_(-1) {
   deck_ = new Deck(seed);
-  deck_->shuffle();
+  // deck_->shuffle();
 }
 
 void RoundModel::updateDeck(int seed) {

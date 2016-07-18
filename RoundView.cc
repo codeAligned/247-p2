@@ -134,11 +134,9 @@ void RoundView::setRagequitButtons(int player_number) {
 }
 
 void RoundView::update() {
-    cout<<"UPDATING"<<endl;
     if(controller_->getCurrentPlayerHand().size() == 0){
         cout<<"Round over"<<endl;
         controller_->updatePlayerScores();
-        cout<<"updating player scores"<<endl;
         displayScore(controller_->getPlayers());
         if(controller_->isGameOver()){
             displayWinner();
@@ -217,12 +215,13 @@ void RoundView::showHand(int player_number) {
 }
 
 void RoundView::onNewGame(){
-    cout<<"New Game. Seed = "<< nameField.get_text() <<endl;
+    cout<<"New Game. Seed in field = "<< nameField.get_text() <<endl;
 
     stringstream text;
     int seed;
     text << nameField.get_text().raw();
     text >> seed;
+    cout<<"New Game. Seed = "<< seed <<endl;
     controller_->newGame(seed);
 
     model_->setPlayers(isHuman);
@@ -364,10 +363,11 @@ void RoundView::displayWinner(){
     Gtk::VBox * reportBox = dialog->get_vbox();
 
     vector<int> winners = controller_->getWinners();
-
-    for(int i=0;i<4;i++){
-        winnerLabels.push_back(new Gtk::Label());
-        reportBox->add(*winnerLabels.at(i));
+    if(winnerLabels.size()==0){
+        for(int i=0;i<4;i++){
+            winnerLabels.push_back(new Gtk::Label());
+            reportBox->add(*winnerLabels.at(i));
+        }
     }
 
     for (int i =0; i<winners.size();i++){

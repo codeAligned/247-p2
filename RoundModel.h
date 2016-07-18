@@ -8,7 +8,7 @@
 #include "Player.h"
 #include "Deck.h"
 
-const int numFaces = 6;
+const int numFaces = 13;
 const int numSuits = 4;
 const int numCards = numFaces * numSuits;
 
