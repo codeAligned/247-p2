@@ -17,6 +17,7 @@ public:
 private:
     std::vector<Card*> cards_;
     const int CARD_COUNT = 52;
+    int seed_;
 };
 
 #endif

@@ -4,7 +4,6 @@
 using namespace std;
 
 // Default seed value, global since shuffle expects global seed variable.
-int seed = 0;
 
 Deck::Deck() {
     for(int i = 0; i < SUIT_COUNT; ++i) {
@@ -12,6 +11,7 @@ Deck::Deck() {
             cards_.push_back( new Card( static_cast<Suit>(i), static_cast<Rank>(j) ) );
         }
     }
+    seed_ = 0;
 }
 
 Deck::Deck(int seedIn) {
@@ -20,7 +20,7 @@ Deck::Deck(int seedIn) {
             cards_.push_back( new Card( static_cast<Suit>(i), static_cast<Rank>(j) ) );
         }
     }
-    seed = seedIn;
+    seed_ = seedIn;
 }
 
 Deck::~Deck() {
@@ -47,7 +47,7 @@ Card* Deck::at(int index){
 }
 
 void Deck::shuffle(){
-    static std::mt19937 rng(seed);
+    static std::mt19937 rng(seed_);
 
     int n = CARD_COUNT;
 

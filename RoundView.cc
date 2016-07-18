@@ -225,6 +225,7 @@ int RoundView::returnSeedFromView() {
 
 void RoundView::onNewGame(){
     int seed = returnSeedFromView();
+    cleanRound();
     cout<<"New Game. Seed = "<< seed <<endl;
     controller_->newGame(seed);
 

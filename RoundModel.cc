@@ -12,11 +12,11 @@ RoundModel::RoundModel(int seed) {
 
 void RoundModel::updateDeck(int seed) {
     cout << "Updating deck with seed: " << seed << endl;
-    delete deck_;
+    // delete deck_;
     deck_ = new Deck(seed);
     deck_->shuffle();
     vector<Hand*> hands_ = deck_->dealCards();
-    vector<Card*> played_cards_ = vector<Card*>();
+    played_cards_ = vector<Card*>();
     for(int i=0; i<players_.size();i++){
         players_.at(i)->setScore(0);
         players_.at(i)->setHand(hands_.at(i));
