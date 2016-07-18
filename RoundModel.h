@@ -25,17 +25,12 @@ public:
     void ragequit(int, Player*);
     void newRound();
     void updateDeck(int);
-    Suit suit();
-    Rank face();
-    void nextCard();
-    void resetCards();
     void setPlayers(bool[4]);
     void notifyView();
 private:
     std::vector<Player*> players_;
     std::vector<Card*> played_cards_;
     Deck* deck_;
-    int topCard_;
 }; // Model
 
 

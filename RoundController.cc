@@ -32,24 +32,6 @@ int RoundController::who7Spades() const{
     return -1;
 }
 
-// RoundController::~RoundController() {}
-
-void RoundController::startRound() {
-    for(int i = 0; i < 52; ++i) {
-        startTurns();
-    }
-    updatePlayerScores();
-}
-
-void RoundController::startTurns() {
-    Player* currentPlayer = getPlayer(currentPlayer_);
-    // if (currentPlayer->isHuman()) {
-    //     view_->printHumanInfo(getClubs(), getDiamonds(), getHearts(), getSpades(),
-    //                           currentPlayer->getCards(), calculateLegalPlay(currentPlayer));
-    // }
-    // turnLoop();
-}
-
 void RoundController::turnLoop() {
     int temp_num = currentPlayer_;
     Player* currentPlayer = getPlayer(currentPlayer_);
@@ -294,15 +276,6 @@ void RoundController::plusPlayerNum(int &player_number) {
         player_number = 0;
     }
     cout<<"After: "<<player_number<<endl;
-}
-
-void RoundController::nextButtonClicked() {
-     model_->nextCard();
-}
-
-
-void RoundController::resetButtonClicked() {
-     model_->resetCards();
 }
 
 bool RoundController::isGameOver() const{

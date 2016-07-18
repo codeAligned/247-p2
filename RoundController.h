@@ -20,7 +20,6 @@ public:
     RoundController( RoundModel*, std::vector<Player*>, int seed = 0 );
     // ~RoundController();
     int who7Spades() const;
-    void startRound();
     void newRound();
     void newGame(int);
     void setCurrentPlayer(int);
@@ -31,8 +30,6 @@ public:
     Player* getPlayer(int) const;
     Player* getCurrentPlayer() const;
     std::vector<Card*> getCurrentPlayerHand() const;
-   void nextButtonClicked();
-   void resetButtonClicked();
    void playComputerTurn(int);
    bool playerIsHuman(int);
     Command playTurn(Player*);
@@ -53,7 +50,6 @@ private:
     bool isLegalPlay(Player*, Card) const;
     int getRoundScore(Player*) const;
     void turnLoop();
-    void startTurns();
     void plusPlayerNum(int&);
     std::vector<Card*> filterBySuit(Suit) const;
     int currentPlayer_;

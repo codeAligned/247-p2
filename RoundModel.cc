@@ -5,7 +5,7 @@
 #include "HumanPlayer.h"
 using namespace std;
 
-RoundModel::RoundModel(int seed) : topCard_(-1) {
+RoundModel::RoundModel(int seed) {
   deck_ = new Deck(seed);
   // deck_->shuffle();
 }
@@ -109,30 +109,6 @@ void RoundModel::newRound() {
     }
 }
 
-Suit RoundModel::suit() {
-  if (topCard_ == -1) return NOSUIT;
-
-  return (Suit) (topCard_ % numSuits);
-}
-
-Rank RoundModel::face() {
-  if (topCard_ == -1) return NOFACE;
-
-  return (Rank) (topCard_ / numSuits);
-}
-
-void RoundModel::nextCard() {
-  if (topCard_ == numCards-1) return;
-
-  topCard_ += 1;
-
-}
-
 void RoundModel::notifyView(){
     notify();
-}
-
-void RoundModel::resetCards() {
-  topCard_ = -1;
-  notify();
 }
