@@ -39,6 +39,7 @@ public:
 	virtual void update();	// Observer Pattern: concrete update() method
 
 private:
+    int returnSeedFromView();
     void setRagequitButtons(int);
     void showHand(int);
 	// Observer Pattern: to access Model accessors without having to downcast subject

@@ -215,13 +215,16 @@ void RoundView::showHand(int player_number) {
     }
 }
 
-void RoundView::onNewGame(){
-    cout<<"New Game. Seed in field = "<< nameField.get_text() <<endl;
-
+int RoundView::returnSeedFromView() {
     stringstream text;
     int seed;
     text << nameField.get_text().raw();
     text >> seed;
+    return seed;
+}
+
+void RoundView::onNewGame(){
+    int seed = returnSeedFromView();
     cout<<"New Game. Seed = "<< seed <<endl;
     controller_->newGame(seed);
 
@@ -255,10 +258,7 @@ void RoundView::onQuitGame(){
         ragequitButtons[i]->hide();
         toggleHumanButtons[i]->show();
     }
-    std::stringstream text;
-    int seed;
-    text << nameField.get_text().raw();
-    text >> seed;
+    int seed = returnSeedFromView();
     RoundModel model = RoundModel(seed);                          // Create model
     RoundController controller( &model, model.getPlayers());  // Create controller
     cout<<"Quit Game."<<endl;
