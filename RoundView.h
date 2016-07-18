@@ -85,8 +85,7 @@ private:
 	void nextButtonClicked();
 	void resetButtonClicked();
 
-    //temp button:
-    Gtk::Button testButton;
+    vector<Gtk::Label*> winnerLabels;
 
 }; // View
 

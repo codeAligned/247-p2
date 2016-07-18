@@ -364,11 +364,19 @@ void RoundView::displayWinner(){
     Gtk::VBox * reportBox = dialog->get_vbox();
 
     vector<int> winners = controller_->getWinners();
+
+    for(int i=0;i<4;i++){
+        winnerLabels.push_back(new Gtk::Label());
+        reportBox->add(*winnerLabels.at(i));
+    }
+
     for (int i =0; i<winners.size();i++){
         stringstream ss;
-        ss<<winners.at(i);
-        Gtk::Label * winnerLabel = new Gtk::Label("Player "+ ss.str() +" wins!");
-        reportBox->add(*winnerLabel);
+        ss<<winners.at(i)+1;
+        winnerLabels.at(i)->set_label("Player "+ ss.str() +" wins!");
+    }
+    for (int i =winners.size(); i<4;i++){
+        winnerLabels.at(i)->hide();
     }
 
     /* Set title */
