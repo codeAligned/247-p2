@@ -18,7 +18,6 @@ class RoundModel;
 class RoundController {
 public:
     RoundController( RoundModel*, std::vector<Player*>, int seed = 0 );
-    // ~RoundController();
     int who7Spades() const;
     void newRound();
     void newGame(int);
@@ -30,8 +29,8 @@ public:
     Player* getPlayer(int) const;
     Player* getCurrentPlayer() const;
     std::vector<Card*> getCurrentPlayerHand() const;
-   void playComputerTurn(int);
-   bool playerIsHuman(int);
+    void playComputerTurn(int);
+    bool playerIsHuman(int);
     Command playTurn(Player*);
     void executeCommand(Command);
     bool determinePlay(Player*, Card);

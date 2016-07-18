@@ -104,6 +104,7 @@ RoundView::RoundView(RoundController *c, RoundModel *m) : model_(m), controller_
         handButtons[i]->set_image(*(new Gtk::Image(nullCardPixbuf)));
         hboxHand.add(*handButtons[i]);
         handButtons[i]->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &RoundView::onCardClicked), i) );
+        handButtons[i]->set_sensitive(false);
     }
 
     // The final step is to display this newly created widget.
@@ -206,7 +207,7 @@ void RoundView::showHand(int player_number) {
     for (int i = 0; i < hand.size(); i++ ) {
         Gtk::Image* card_image = new Gtk::Image( deck.image(hand.at(i)->getRank(), hand.at(i)->getSuit()) );
         handButtons[i]->set_image(*(card_image));
-        // handButtons[i]->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &RoundView::onCardClicked), i) );
+        handButtons[i]->set_sensitive(true);
     }
     for( int j = hand.size(); j< 13; j++){
         Gtk::Image* card_image = new Gtk::Image( deck.null() );
